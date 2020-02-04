@@ -1,0 +1,16 @@
+Officiel Nginx & Minkube : https://kubernetes.io/docs/tasks/access-application-cluster/ingress-minikube/
+
+$ minikube start
+$ minikube addons enable ingress
+$ kubectl run web --image=gcr.io/google-samples/hello-app:1.0 --port=8080
+$ kubectl expose deployment web --target-port=8080 --type=NodePort
+$ minikube service web --url
+
+Création du YAML nommé "example-ingress"
+
+$ kubectl apply -f example-ingress.yaml
+$ kubectl get ingress (ou alors $ minikube ip)
+
+On modifie en suod /etc/hosts
+
+$ curl hello-world.info
