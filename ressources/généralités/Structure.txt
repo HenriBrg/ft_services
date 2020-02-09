@@ -67,3 +67,11 @@ Deleting a DaemonSet will clean up the Pods it created.
 # La déploiement sur K8S se font via des fichiers YAML ou JSON
 
 minikube start # démare le cluster
+
+# Prérequis
+
+# 1) --> VirtualBox : Logiciel libre de virtualisation (Oracle)
+# 2) --> Docker - Docker Machine
+# 3) --> Minikube
+# 4) --> Kubctl
+# 5) --> Helm (à priori non nécessaire)
