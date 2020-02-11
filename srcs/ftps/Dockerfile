@@ -1,7 +1,8 @@
-# Sources :
-#
-# 	--> https://github.com/gimoh/docker-pureftpd/blob/master/Dockerfile
-# 	--> https://wiki.archlinux.org/index.php/Pure-FTPd
+
+
+
+
+# Explications : ---------------------------------------------------------------
 
 # Notes :
 # With Pure-FTPd, it's possible to use virtual users instead of real system users.
@@ -13,17 +14,7 @@
 #
 # ENTRYPOINT allows you to configure a container that will run as an executable.
 
-FROM			alpine
-ENV				PUREFTPD_VERSION=1.0.42-r0
-ENV				SYSLOG_STDOUT_VERSION=1.1.1
-RUN				printf '%s\n' \
-				'@testing http://dl-cdn.alpinelinux.org/alpine/edge/testing' \
-				>> /etc/apk/repositories
-RUN				apk update
-RUN				apk add pure-ftpd@testing=1.0.49-r0
-COPY			ftpsStartIPUpdated /ftpsStart
-COPY			pure-ftpd.pem /etc/ssl/private/
-ENTRYPOINT		sh /ftpsStart
-
-# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Debug section <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-# RUN				ls /etc/ssl/private/
+# Sources :
+#
+# 	--> https://github.com/gimoh/docker-pureftpd/blob/master/Dockerfile
+# 	--> https://wiki.archlinux.org/index.php/Pure-FTPd

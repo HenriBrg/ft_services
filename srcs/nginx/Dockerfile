@@ -1,37 +1,10 @@
-FROM	alpine:latest
+
+
+# Explications : ---------------------------------------------------------------
 
 # The --no-cache option allows to not cache the index locally, which is useful for keeping containers small.
 # Literally it equals apk update in the beginning and rm -rf /var/cache/apk/* in the end.
 # Alpine docker image doesn't have bash installed by default
-
-RUN		apk update
-RUN		apk add --no-cache --upgrade bash
-RUN		apk add nginx openrc curl
-
-COPY	config/nginx.conf /etc/nginx/nginx.conf
-RUN		rm /etc/nginx/conf.d/default.conf
-
-#		On s'assure que les dossiers & fichiers sont accessibles
-RUN		chown -R nobody.nobody /run
-RUN		chown -R nobody.nobody /var/lib/nginx
-RUN		chown -R nobody.nobody /var/log/nginx
-
-#		Our nginx root folder
-RUN		mkdir -p /var/www/html
-
-# 		VOLUME	/var/www/html
-
-
-RUN		apk add	--no-cache openssh bash
-
-
-
-
-
-
-
-
-# Explications : ---------------------------------------------------------------
 
 # This command $ sed -e 'd' /etc/passwd is the same as $ cat /etc/passwd | sed 'd'
 
