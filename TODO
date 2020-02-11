@@ -1,12 +1,8 @@
-Tutoriels déja fait :
-- Introduction à minikube (server node) : https://kubernetes.io/fr/docs/tutorials/hello-minikube/
-- Nginx & Minkube : https://kubernetes.io/docs/tasks/access-application-cluster/ingress-minikube/
-
-Tutoriel à faire :
-
 Article à lire :
 	---> https://devopssec.fr/article/minikube-installation-manipulation-cluster-kubernetes
-
+	---> https://github.com/kubernetes/ingress-nginx/blob/master/rootfs/etc/nginx/template/nginx.tmpl
+	--->
+	---> helm
 --------------------------------------------------------------------------------
 
 InfluxDB & Grafana :
@@ -16,6 +12,7 @@ Autres liens :
 	--> https://medium.com/@rajathithanrajasekar/kubernetes-monitoring-using-influxdb-grafana-in-google-cloud-platform-51da13f6f3e
 	--> https://blog.kublr.com/how-to-utilize-the-heapster-influxdb-grafana-stack-in-kubernetes-for-monitoring-pods-4a553f4d36c9
 	--> https://elatov.github.io/2018/06/installing-heapster-for-kubernetes/
+	--> https://www.nginx.com/resources/wiki/start/topics/examples/full/
 
 Peut être utile :
 	--> FTPS et la connexion aux services : https://stackoverflow.com/questions/54309811/access-ftp-service-via-other-docker-container

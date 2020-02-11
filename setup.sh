@@ -8,6 +8,13 @@
 # 	exit 	1
 # fi
 
+# Default Config Minikube : cat ~/.minikube/machines/minikube/config.json
+# Champs configurable de minikube : minikube config -h
+# DefaultMemory    = 2048 MB      # Quantité de la RAM
+# DefaultCPUS      = 2            # Nombre de processeurs
+# DefaultDiskSize  = 20 GB        # Taille du disque virtuel
+# DefaultVMDriver  = virtualbox   # L'hyperviseur utilisé
+
 if ! minikube status > /dev/null 2>&1
 then
     echo Starting Minikube ...
@@ -16,8 +23,8 @@ then
 		echo We failed to launch Minikube
 		exit 1
     fi
-    minikube addons enable metrics-server
-    minikube addons enable ingress
+    # minikube addons enable metrics-server
+    # minikube addons enable ingress
 	minikube addons enable dashboard
 fi
 
@@ -29,11 +36,13 @@ eval 		$(minikube docker-env)
 cp			srcs/ftps/ftpsStart srcs/ftps/ftpsStartIPUpdated
 sed			-i '' "s/<TO_BE_REPLACE_BY_MINIKUBE_IP>/$MINIKUBE_IP/g" srcs/ftps/ftpsStartIPUpdated
 
-docker		build -t serverftps srcs/ftps # > /dev/null
+docker		build -t serverftps srcs/ftps > /dev/null
 
 # ------------------------------------------------------------------------------
 
 # Explanations
+#	--> minikube start : https://evalle.xyz/posts/configure-kube-apiserver-in-minikube/
+#		http://www.thinkcode.se/blog/2019/02/20/kubernetes-service-node-port-range
 
 #   --> Eval() : https://stackoverflow.com/questions/52310599/what-does-minikube-docker-env-mean
 #	--> retourne un string de shell d'export de plusieurs variables d'environnement pour que le daemon Docker puisse s'exécuter dans minikube

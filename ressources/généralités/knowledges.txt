@@ -1,0 +1,18 @@
+https://kubernetes.io/docs/concepts/configuration/secret/
+
+
+Kubernetes Secrets let you store and manage sensitive information, such as passwords,
+OAuth tokens, and ssh keys. Storing confidential information in a Secret is safer
+and more flexible than putting it verbatim in a Pod definition or in a container image.
+
+--------------------------------------------------------------------------------
+
+https://kubernetes.io/docs/tasks/manage-kubernetes-objects/kustomization/
+
+Kustomize is a tool for customizing Kubernetes configurations. It has the following
+features to manage application configuration files:
+	--> generating resources from other sources
+	--> setting cross-cutting fields for resources
+	--> composing and customizing collections of resources
+
+--------------------------------------------------------------------------------
