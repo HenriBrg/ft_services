@@ -1,20 +1,16 @@
-# if [ -d "/goinfre" ]
-# then
-# 	mkdir	-p /goinfre/ft_services_root
-# 	export	MINIKUBE_HOME="/goinfre/ft_services_root"
-# 	echo 	$MINIKUBE_HOME
-# else
-# 	echo 	No Goinfre Folder
-# 	exit 	1
-# fi
+# 1) Move executable in goinfre folder
+if [ -d "/goinfre" ]
+then
+	mkdir	-p /goinfre/ft_services_root
+	export	MINIKUBE_HOME="/goinfre/ft_services_root"
+	echo 	$MINIKUBE_HOME
+else
+	# echo 	No Goinfre Folder
+	# exit 	1
+	echo
+fi
 
-# Default Config Minikube : cat ~/.minikube/machines/minikube/config.json
-# Champs configurable de minikube : minikube config -h
-# DefaultMemory    = 2048 MB      # Quantité de la RAM
-# DefaultCPUS      = 2            # Nombre de processeurs
-# DefaultDiskSize  = 20 GB        # Taille du disque virtuel
-# DefaultVMDriver  = virtualbox   # L'hyperviseur utilisé
-
+# 2) Start Minikube
 if ! minikube status > /dev/null 2>&1
 then
     echo Starting Minikube ...
@@ -23,20 +19,15 @@ then
 		echo We failed to launch Minikube
 		exit 1
     fi
-    # minikube addons enable metrics-server
-    # minikube addons enable ingress
-	minikube addons enable dashboard
 fi
 
-export		MINIKUBE_IP=$(minikube ip)
-echo 		"Minikube IP is : $MINIKUBE_IP"
-
+# 3) Set ENV variables
 eval 		$(minikube docker-env)
+export		MINIKUBEIP=$(minikube ip)
 
-cp			srcs/ftps/ftpsStart srcs/ftps/ftpsStartIPUpdated
-sed			-i '' "s/<TO_BE_REPLACE_BY_MINIKUBE_IP>/$MINIKUBE_IP/g" srcs/ftps/ftpsStartIPUpdated
+# 4) Deploy Nginx SQL PhpMyAdmin
 
-docker		build -t serverftps srcs/ftps > /dev/null
+
 
 # ------------------------------------------------------------------------------
 

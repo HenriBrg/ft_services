@@ -2,7 +2,8 @@ Article à lire :
 	---> https://devopssec.fr/article/minikube-installation-manipulation-cluster-kubernetes
 	---> https://github.com/kubernetes/ingress-nginx/blob/master/rootfs/etc/nginx/template/nginx.tmpl
 	--->
-	---> helm
+	--->
+
 --------------------------------------------------------------------------------
 
 InfluxDB & Grafana :
@@ -14,5 +15,5 @@ Autres liens :
 	--> https://elatov.github.io/2018/06/installing-heapster-for-kubernetes/
 	--> https://www.nginx.com/resources/wiki/start/topics/examples/full/
 
-Peut être utile :
+Peut-être utile :
 	--> FTPS et la connexion aux services : https://stackoverflow.com/questions/54309811/access-ftp-service-via-other-docker-container
