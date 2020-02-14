@@ -1,0 +1,9 @@
+# HELM ISSUE
+--> https://github.com/rook/rook/issues/4557
+--> Solved : run $ helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+
+# Errors
+
+1) Deployment does not have minimum availability
+2) error while running "VolumeBinding" filter plugin for pod "wordpress-5b544f4567-22zz9": pod has unbound immediate PersistentVolumeClaims
+3) containers with unready status: [mysql]
