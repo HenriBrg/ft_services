@@ -1,16 +1,5 @@
-# 1) Move executable in goinfre folder
-if [ -d "/goinfre" ]
-then
-	mkdir	-p /goinfre/ft_services_root
-	export	MINIKUBE_HOME="/goinfre/ft_services_root"
-	echo 	$MINIKUBE_HOME
-else
-	# echo 	No Goinfre Folder
-	# exit 	1
-	echo
-fi
+# Start Minikube
 
-# 2) Start Minikube
 if ! minikube status > /dev/null 2>&1
 then
     echo Starting Minikube ...
@@ -23,43 +12,43 @@ then
 	minikube addons enable ingress
 fi
 
+# ------------------------------------------------------------------------------
 
-kubectl get all
-export MINIKUBE_IP=$(minikube ip)
-echo "Minikube IP is $MINIKUBE_IP"
-eval $(minikube docker-env)
+# Attribute correct IP adress to properly apply FTPs server
 
-cp srcs/ftps/entrypoint srcs/ftps/entrypoint-target
-sed -i '' "s/##MINIKUBE_IP##/$MINIKUBE_IP/g" srcs/ftps/entrypoint-target
+eval	$(minikube docker-env)
+export	MINIKUBE_IP=$(minikube ip)
+cp		srcs/ftps/entrypoint srcs/ftps/entrypoint-target
+sed		-i '' "s/##MINIKUBE_IP##/$MINIKUBE_IP/g" srcs/ftps/entrypoint-target
 
-docker build -t ftpss srcs/ftps
+# ------------------------------------------------------------------------------
 
+# Build container ftpss and nginx_test
 
-docker build -t nginx_test srcs/nginx
+docker	build -t ftpss srcs/ftps
+docker	build -t nginx_test srcs/nginx
+eval	$(minikube docker-env)
 
+# ------------------------------------------------------------------------------
 
+# Build all ressources and connect helm services
 
-eval $(minikube docker-env)
+kubectl		apply -f srcs/mysql/mysql.yaml
+kubectl		apply -f srcs/phpmyadmin/phpmyadmin.yaml
+kubectl		apply -f srcs/nginx/nginx.yaml
+kubectl		apply -f srcs/wordpress/wordpress.yaml
+kubectl		apply -f srcs/ftps/ftps.yaml
+kubectl		apply -k srcs/
+kubectl		apply -f srcs/ingress/ingress.yaml
 
-kubectl apply -f srcs/mysql/mysql.yaml
-kubectl apply -f srcs/phpmyadmin/phpmyadmin.yaml
-kubectl apply -f srcs/nginx/nginx.yaml
-kubectl apply -f srcs/wordpress/wordpress.yaml
-kubectl apply -f srcs/ftps/ftps.yaml
+helm 		install -f srcs/influxdb/influxdb.yaml influxdb stable/influxdb
+helm 		install -f srcs/grafana/grafana.yaml grafana stable/grafana
+helm 		install -f srcs/telegraf/telegraf.yaml telegraf stable/telegraf
 
-kubectl apply -k srcs/
-kubectl apply -f srcs/ingress/ingress.yaml
-
-helm install -f srcs/influxdb/influxdb.yaml influxdb stable/influxdb
-sleep 10s
-helm install -f srcs/grafana/grafana.yaml grafana stable/grafana
-sleep 10s
-helm install -f srcs/telegraf/telegraf.yaml telegraf stable/telegraf
-
-echo "Services installed... Launching dashboard \n"
-echo "Wordpress URL is : http://$MINIKUBE_IP:5050 \n"
-echo "NGINX URL is : http://$MINIKUBE_IP \n"
-echo "PHPMYADMIN URL is : http://$MINIKUBE_IP:5000 \n"
+# echo "Services installed... Launching dashboard \n"
+# echo "Wordpress URL is : http://$MINIKUBE_IP:5050 \n"
+# echo "NGINX URL is : http://$MINIKUBE_IP \n"
+# echo "PHPMYADMIN URL is : http://$MINIKUBE_IP:5000 \n"
 
 minikube dashboard
 

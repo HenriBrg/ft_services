@@ -1,0 +1,38 @@
+
+# FTP Explications : ---------------------------------------------------------------
+
+# Notes :
+# With Pure-FTPd, it's possible to use virtual users instead of real system users.
+# ENV commands are required or Docker will fetch unecessary files
+#
+# Le certificat self-signed a été généré via la commande shell suivante :
+# openssl req -x509 -nodes -days 7300 -newkey rsa:2048 -subj "/C=FR/ST=fr/L=Paris/O=42/CN=hberger"  > srcs/ftps/pure-ftpd.pem
+# avec chmod 600 sur le fichier .pem, ce fichier doit se trouver dans /etc/ssl/private
+#
+
+# Sources :
+#
+# 	--> https://github.com/gimoh/docker-pureftpd/blob/master/Dockerfile
+# 	--> https://wiki.archlinux.org/index.php/Pure-FTPd
+
+# vsftpd :  https://doc.fedora-fr.org/wiki/Vsftpd_:_Installation_et_configuration
+# 			https://tn710617.github.io/ftpServer/
+
+# https://hub.docker.com/r/forumi0721alpinearmhf/alpine-armhf-vsftpd/
+
+
+# Nginx Explications : ---------------------------------------------------------------
+
+# The --no-cache option allows to not cache the index locally, which is useful for keeping containers small.
+# Literally it equals apk update in the beginning and rm -rf /var/cache/apk/* in the end.
+# Alpine docker image doesn't have bash installed by default
+
+# This command $ sed -e 'd' /etc/passwd is the same as $ cat /etc/passwd | sed 'd'
+
+# $ mkdir -p : S'assurer que  chaque  répertoire  indiqué  existe. Créer   les   répertoires  parents  manquants.  Ces
+# derniers sont  créés  avec  l'autorisation  d'accès umask  modifiée  par  `u+wx'
+
+# chown -R : Modifier  récursivement  l'appartenance  des réper­toires et de leurs contenus.
+# Alpine user management : https://stackoverflow.com/questions/49955097/how-do-i-add-a-user-when-im-using-alpine-as-a-base-image
+# Source : https://www.digitalocean.com/community/tutorials/docker-explained-how-to-containerize-and-use-nginx-as-a-proxy
+# https://github.com/nginxinc/docker-nginx/issues/41#issuecomment-140713002
