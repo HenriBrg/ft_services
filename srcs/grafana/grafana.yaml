@@ -1,0 +1,191 @@
+rbac:
+  create: true
+  pspEnabled: true
+  pspUseAppArmor: true
+  namespaced: false
+  extraRoleRules: []
+  extraClusterRoleRules: []
+serviceAccount:
+  create: true
+  name:
+  nameTest:
+
+replicas: 1
+
+podDisruptionBudget: {}
+
+deploymentStrategy:
+  type: RollingUpdate
+
+readinessProbe:
+  httpGet:
+    path: /api/health
+    port: 3000
+
+livenessProbe:
+  httpGet:
+    path: /api/health
+    port: 3000
+  initialDelaySeconds: 60
+  timeoutSeconds: 30
+  failureThreshold: 10
+
+image:
+  repository: grafana/grafana
+  tag: 6.5.1
+  pullPolicy: IfNotPresent
+
+testFramework:
+  enabled: false
+  image: "dduportal/bats"
+  tag: "0.4.0"
+  securityContext: {}
+
+securityContext:
+  runAsUser: 472
+  fsGroup: 472
+
+
+extraConfigmapMounts: []
+extraEmptyDirMounts: []
+
+downloadDashboardsImage:
+  repository: appropriate/curl
+  tag: latest
+  pullPolicy: IfNotPresent
+
+downloadDashboards:
+  env: {}
+
+podPortName: grafana
+
+service:
+  type: NodePort
+  port: 3000
+  nodePort: 3000
+  targetPort: 3000
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  labels: {}
+  portName: service
+
+ingress:
+  enabled: false
+  hosts:
+    - graf.ana
+
+resources: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}
+extraInitContainers: []
+extraContainers: |
+persistence:
+  type: pvc
+  enabled: true
+  accessModes:
+    - ReadWriteOnce
+  size: 100Mi
+  finalizers:
+    - kubernetes.io/pvc-protection
+
+initChownData:
+  enabled: true
+  image:
+    repository: busybox
+    tag: "1.30"
+    pullPolicy: IfNotPresent
+  resources: {}
+
+adminUser: admin
+adminPassword: admin
+
+admin:
+  existingSecret: ""
+  userKey: admin-user
+  passwordKey: admin-password
+
+## Define command to be executed at startup by grafana container
+# command:
+# - "sh"
+# - "/run.sh"
+
+env: {}
+envFromSecret: ""
+envRenderSecret: {}
+extraSecretMounts: []
+extraVolumeMounts: []
+
+plugins: []
+  # - digrich-bubblechart-panel
+  # - grafana-clock-panel
+
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+    - name: InfluxDB
+      type: influxdb
+      url: http://influxdb.default:8086
+      access: proxy
+      isDefault: true
+      user: admin
+      password: admin
+      database: telegraf
+
+notifiers: {}
+
+dashboardProviders:
+  dashboardproviders.yaml:
+    apiVersion: 1
+    providers:
+    - name: 'default'
+      orgId: 1
+      folder: ''
+      type: file
+      disableDeletion: false
+      editable: true
+      options:
+        path: /var/lib/grafana/dashboards/default
+
+## ref: https://grafana.com/dashboards
+dashboards:
+  default:
+    influxdb-metrics:
+      gnetId: 11057
+      revision: 1
+      datasource: InfluxDB
+    system-metrics:
+      gnetId: 5955
+      revision: 1
+      datasource: InfluxDB
+    mysql-metrics:
+      gnetId: 1177
+      revision: 1
+      datasource: InfluxDB
+    wordpress:
+      json: |
+            { "annotations": { "list": [ { "builtIn": 1, "datasource": "-- Grafana --", "enable": true, "hide": true, "iconColor": "rgba(0, 211, 255, 1)", "name": "Annotations & Alerts", "type": "dashboard" } ] }, "editable": true, "gnetId": null, "graphTooltip": 0, "id": 4, "links": [], "panels": [ { "cacheTimeout": null, "datasource": null, "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 }, "id": 6, "links": [], "options": { "fieldOptions": { "calcs": [ "mean" ], "defaults": { "mappings": [ { "id": 0, "op": "=", "text": "N/A", "type": 1, "value": "null" } ], "max": 100, "min": 0, "nullValueMode": "connected", "thresholds": [ { "color": "green", "value": null }, { "color": "red", "value": 80 } ], "unit": "none" }, "override": {}, "values": false }, "orientation": "horizontal", "showThresholdLabels": false, "showThresholdMarkers": true }, "pluginVersion": "6.5.1", "targets": [ { "groupBy": [ { "params": [ "1m" ], "type": "time" }, { "params": [ "null" ], "type": "fill" } ], "measurement": "http_response", "orderByTime": "ASC", "policy": "autogen", "refId": "A", "resultFormat": "time_series", "select": [ [ { "params": [ "content_length" ], "type": "field" }, { "params": [], "type": "mean" } ] ], "tags": [] } ], "timeFrom": null, "timeShift": null, "title": "Response length", "type": "gauge" }, { "aliasColors": {}, "bars": false, "dashLength": 10, "dashes": false, "datasource": null, "fill": 1, "fillGradient": 0, "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 }, "hiddenSeries": false, "id": 4, "interval": "", "legend": { "avg": false, "current": false, "max": false, "min": false, "show": true, "total": false, "values": false }, "lines": true, "linewidth": 1, "nullPointMode": "null", "options": { "dataLinks": [] }, "percentage": false, "pointradius": 2, "points": false, "renderer": "flot", "seriesOverrides": [], "spaceLength": 10, "stack": false, "steppedLine": false, "targets": [ { "groupBy": [ { "params": [ "1m" ], "type": "time" }, { "params": [ "null" ], "type": "fill" } ], "measurement": "http_response", "orderByTime": "ASC", "policy": "autogen", "refId": "A", "resultFormat": "time_series", "select": [ [ { "params": [ "response_time" ], "type": "field" }, { "params": [], "type": "mean" } ] ], "tags": [] } ], "thresholds": [], "timeFrom": null, "timeRegions": [], "timeShift": null, "title": "Response time", "tooltip": { "shared": true, "sort": 0, "value_type": "individual" }, "type": "graph", "xaxis": { "buckets": null, "mode": "time", "name": null, "show": true, "values": [] }, "yaxes": [ { "format": "short", "label": null, "logBase": 1, "max": null, "min": null, "show": true }, { "format": "short", "label": null, "logBase": 1, "max": null, "min": null, "show": true } ], "yaxis": { "align": false, "alignLevel": null } }, { "aliasColors": {}, "bars": false, "dashLength": 10, "dashes": false, "datasource": null, "fill": 1, "fillGradient": 0, "gridPos": { "h": 9, "w": 12, "x": 0, "y": 8 }, "hiddenSeries": false, "id": 2, "legend": { "avg": false, "current": false, "max": false, "min": false, "show": true, "total": false, "values": false }, "lines": true, "linewidth": 1, "nullPointMode": "null", "options": { "dataLinks": [] }, "percentage": false, "pointradius": 2, "points": false, "renderer": "flot", "seriesOverrides": [], "spaceLength": 10, "stack": false, "steppedLine": false, "targets": [ { "groupBy": [ { "params": [ "10s" ], "type": "time" }, { "params": [ "null" ], "type": "fill" } ], "measurement": "http_response", "orderByTime": "ASC", "policy": "autogen", "refId": "A", "resultFormat": "time_series", "select": [ [ { "params": [ "http_response_code" ], "type": "field" }, { "params": [], "type": "mean" } ] ], "tags": [] } ], "thresholds": [], "timeFrom": null, "timeRegions": [], "timeShift": null, "title": "Response status code", "tooltip": { "shared": true, "sort": 0, "value_type": "individual" }, "type": "graph", "xaxis": { "buckets": null, "mode": "time", "name": null, "show": true, "values": [] }, "yaxes": [ { "format": "short", "label": null, "logBase": 1, "max": null, "min": null, "show": true }, { "format": "short", "label": null, "logBase": 1, "max": null, "min": null, "show": true } ], "yaxis": { "align": false, "alignLevel": null } } ], "schemaVersion": 21, "style": "dark", "tags": [], "templating": { "list": [] }, "time": { "from": "now-6h", "to": "now" }, "timepicker": { "refresh_intervals": [ "5s", "10s", "30s", "1m", "5m", "15m", "30m", "1h", "2h", "1d" ] }, "timezone": "", "title": "Wordpress Dashboard", "uid": "tHsqSXsWk", "version": 6 }
+
+dashboardsConfigMaps: {}
+
+grafana.ini:
+  paths:
+    data: /var/lib/grafana/data
+    logs: /var/log/grafana
+    plugins: /var/lib/grafana/plugins
+    provisioning: /etc/grafana/provisioning
+  analytics:
+    check_for_updates: true
+  log:
+    mode: console
+  grafana_net:
+    url: https://grafana.net
+  server:
+    root_url: "http://graf.ana/grafana"
+    serve_from_sub_path: true
+
+smtp:
+  existingSecret: ""
+  userKey: "user"
+  passwordKey: "password"
