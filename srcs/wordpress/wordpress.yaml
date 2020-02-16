@@ -6,10 +6,10 @@ metadata:
     app: wordpress
 spec:
   ports:
-  - protocol: TCP
-    port: 80
-    targetPort: 80
-    nodePort: 5050
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      nodePort: 5050
   selector:
     app: wordpress
     tier: frontend
@@ -48,30 +48,30 @@ spec:
         tier: frontend
     spec:
       containers:
-      - name: wordpress
-        image: wordpress:4.8-apache
-        env:
-        - name: WORDPRESS_DB_HOST
-          value: mysql
-        - name: WORDPRESS_DB_USER
-          value: root
-        - name: WORDPRESS_DB_PASSWORD
-          value: root
-        - name: WORDPRESS_DB_NAME
-          value: wp
-        - name: WORDPRESS_PREFIX
-          value: wp_
-        - name: WORDPRESS_USERNAME
-          value: admin
-        - name: WORDPRESS_PASSWORD
-          value: pwd
-        - name: WORDPRESS_BLOG_NAME
-          value: "Hello World"
-        volumeMounts:
-        - name: wordpress-persistent-storage
-          mountPath: /var/www/html
+        - name: wordpress
+          image: wordpress:4.8-apache
+          env: # Listed here : https://www.digitalocean.com/community/tutorials/how-to-set-up-wordpress-with-mysql-on-kubernetes-using-helm
+            - name: WORDPRESS_DB_HOST
+              value: mysql
+            - name: WORDPRESS_DB_USER
+              value: root
+            - name: WORDPRESS_DB_PASSWORD
+              value: root
+            - name: WORDPRESS_DB_NAME
+              value: wp
+            - name: WORDPRESS_PREFIX
+              value: wp_
+            - name: WORDPRESS_USERNAME
+              value: admin
+            - name: WORDPRESS_PASSWORD
+              value: pwd
+            - name: WORDPRESS_BLOG_NAME
+              value: "Hello World"
+          volumeMounts:
+            - name: wordpress-persistent-storage
+              mountPath: /var/www/html
       restartPolicy: Always
       volumes:
-      - name: wordpress-persistent-storage
-        persistentVolumeClaim:
-          claimName: wp-pv-claim
+        - name: wordpress-persistent-storage
+          persistentVolumeClaim:
+            claimName: wp-pv-claim

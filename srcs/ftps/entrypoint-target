@@ -3,7 +3,6 @@
 # with lftp:
 # `set ssl:verify-certificate false`
 
-# If FTP_USER and FTP_PASSWORD don't exist, we attribute them "admin" value
 [ -z "$FTP_USER" ] && FTP_USER=admin
 [ -z "$FTP_PASSWORD" ] && FTP_PASSWORD=admin
 
@@ -11,4 +10,4 @@ adduser -D "$FTP_USER"
 echo "$FTP_USER:$FTP_PASSWORD" | chpasswd
 echo "user:password = $FTP_USER:$FTP_PASSWORD"
 
-/usr/sbin/pure-ftpd -Y 2 -p 15477:15477 -P "192.168.99.111"
+/usr/sbin/pure-ftpd -Y 2 -p 15477:15477 -P "192.168.99.118"

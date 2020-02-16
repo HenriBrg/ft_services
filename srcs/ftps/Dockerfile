@@ -11,6 +11,10 @@ RUN printf '%s\n' \
 
 COPY entrypoint-target /entrypoint
 
+# Peut etre générer le cert ici ? : openssl req -x509 -nodes -days 7300 -newkey rsa:2048 -subj "/C=FR/ST=fr/L=Paris/O=School 42/CN=rchallie" -keyout /etc/ssl/private/pure-ftpd.pem -out /etc/ssl/private/pure-ftpd.pem
+# chmod 600 /etc/ssl/private/pure-ftpd.pem
+
+
 ENTRYPOINT sh /entrypoint
 
 
@@ -26,6 +30,7 @@ ENTRYPOINT sh /entrypoint
 #
 
 # Sources :
+#		best one : https://coagul.org/drupal/publication/installation-et-configuration-serveur-ftp-pure-ftpd-sous-debian
 #
 # 	--> https://github.com/gimoh/docker-pureftpd/blob/master/Dockerfile
 # 	--> https://wiki.archlinux.org/index.php/Pure-FTPd

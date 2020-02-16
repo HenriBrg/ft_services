@@ -1,3 +1,5 @@
+# https://kubernetes.io/docs/tasks/run-application/run-single-instance-stateful-application/
+
 apiVersion: v1
 kind: Service
 metadata:
@@ -19,7 +21,7 @@ metadata:
     app: mysql
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteOnce # ReadWrite by a single node (vs ReadWriteMany)
   resources:
     requests:
       storage: 1Gi
@@ -43,25 +45,25 @@ spec:
         app: mysql
     spec:
       containers:
-      - image: mysql:5.6
-        name: mysql
-        env:
-        - name: MYSQL_ROOT_PASSWORD
-          value: root
-        - name: MYSQL_DATABASE
-          value: wp
-        - name: MYSQL_USER
-          value: root
-        - name: MYSQL_PASSWORD
-          value: root
-        ports:
-        - containerPort: 3306
+        - image: mysql:5.6
           name: mysql
-        volumeMounts:
-        - name: mysql-persistent-storage
-          mountPath: /var/lib/mysql
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: root
+            - name: MYSQL_DATABASE
+              value: wp
+            - name: MYSQL_USER
+              value: root
+            - name: MYSQL_PASSWORD
+              value: root
+          ports:
+            - containerPort: 3306
+              name: mysql
+          volumeMounts:
+            - name: mysql-persistent-storage
+              mountPath: /var/lib/mysql
       restartPolicy: Always
       volumes:
-      - name: mysql-persistent-storage
-        persistentVolumeClaim:
-          claimName: mysql-pv-claim
+        - name: mysql-persistent-storage
+          persistentVolumeClaim:
+            claimName: mysql-pv-claim

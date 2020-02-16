@@ -3,11 +3,12 @@
 if ! minikube status > /dev/null 2>&1
 then
     echo Starting Minikube ...
-    if ! minikube start --cpus=4 --memory 4000 --disk-size 11000 --vm-driver virtualbox --extra-config=apiserver.service-node-port-range=1-35000
+    if ! minikube start --cpus=4 --memory 10000 --disk-size 20000 --vm-driver virtualbox --extra-config=apiserver.service-node-port-range=1-35000
     then
 		echo We failed to launch Minikube
 		exit 1
     fi
+	minikube addons enable dashboard
 	minikube addons enable metrics-server
 	minikube addons enable ingress
 fi
@@ -51,6 +52,14 @@ helm 		install -f srcs/telegraf/telegraf.yaml telegraf stable/telegraf
 # echo "PHPMYADMIN URL is : http://$MINIKUBE_IP:5000 \n"
 
 minikube dashboard
+
+
+# Wordpress testing
+
+# Your WordPress installation is now operational. To access the admin interface, use
+# the public IP address obtained from the output of kubectl get services,
+# followed by /wp-admin in your web browser
+
 
 # ------------------------------------------------------------------------------
 

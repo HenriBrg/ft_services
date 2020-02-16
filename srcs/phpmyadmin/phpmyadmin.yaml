@@ -44,6 +44,6 @@ spec:
   selector:
     app: phpmyadmin
   ports:
-  - protocol: TCP
-    port: 80
-    nodePort: 5000
+    - protocol: TCP
+      port: 80
+      nodePort: 5000

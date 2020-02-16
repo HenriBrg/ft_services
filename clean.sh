@@ -11,3 +11,6 @@ minikube delete
 
 # $ helm list
 # $ kubectl get all
+
+
+# delete secrets ?

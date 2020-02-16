@@ -1,0 +1,15 @@
+Services within a cluster can communicate directly through their names, without the need for IP addresses
+
+________________________________________________________________________________
+
+A service determines which pods to access by using selector labels.
+A pod that matches these labels will be serviced, independent of whether the pod was created before or after the service
+
+________________________________________________________________________________
+
+A pod can have multiple containers and volumes, but each will need a name.
+You can selectively mount volumes to a container by specifying a mount path for each volume.
+
+________________________________________________________________________________
+
+ A ConfigMap holds your configuration in a key-value format that you can reference in other Kubernetes object definitions

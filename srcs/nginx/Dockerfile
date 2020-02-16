@@ -2,11 +2,8 @@ FROM alpine:3.5
 
 RUN apk --no-cache add nginx curl openrc
 
-# Configure nginx
 COPY config/nginx.conf /etc/nginx/nginx.conf
-# Remove default server definition
 RUN rm /etc/nginx/conf.d/default.conf
-
 # Make sure files/folders needed by the processes are accessable when they run under the nobody user
 RUN chown -R nobody.nobody /run && \
   chown -R nobody.nobody /var/lib/nginx && \
