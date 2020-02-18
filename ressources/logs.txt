@@ -7,3 +7,12 @@
 1) Deployment does not have minimum availability
 2) error while running "VolumeBinding" filter plugin for pod "wordpress-5b544f4567-22zz9": pod has unbound immediate PersistentVolumeClaims
 3) containers with unready status: [mysql]
+
+
+$ minikube status
+
+0218 11:36:16.605274     956 status.go:98] The "minikube" cluster does not exist!
+host: Nonexistent
+kubelet: Nonexistent
+apiserver: Nonexistent
+kubeconfig: Nonexistent
