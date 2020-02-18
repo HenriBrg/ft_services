@@ -11,7 +11,7 @@ RUN printf '%s\n' \
 
 COPY entrypoint-target /entrypoint
 
-# Peut etre générer le cert ici ? : openssl req -x509 -nodes -days 7300 -newkey rsa:2048 -subj "/C=FR/ST=fr/L=Paris/O=School 42/CN=rchallie" -keyout /etc/ssl/private/pure-ftpd.pem -out /etc/ssl/private/pure-ftpd.pem
+# openssl req -x509 -nodes -days 7300 -newkey rsa:2048 -subj "/C=FR/ST=fr/L=Paris/O=School 42/CN=hberger" -keyout /etc/ssl/private/pure-ftpd.pem -out /etc/ssl/private/pure-ftpd.pem
 # chmod 600 /etc/ssl/private/pure-ftpd.pem
 
 

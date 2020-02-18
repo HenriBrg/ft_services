@@ -42,6 +42,7 @@ kubectl		apply -f srcs/ftps/ftps.yaml
 kubectl		apply -k srcs/
 kubectl		apply -f srcs/ingress/ingress.yaml
 
+helm		repo add stable https://kubernetes-charts.storage.googleapis.com
 helm 		install -f srcs/influxdb/influxdb.yaml influxdb stable/influxdb
 helm 		install -f srcs/grafana/grafana.yaml grafana stable/grafana
 helm 		install -f srcs/telegraf/telegraf.yaml telegraf stable/telegraf

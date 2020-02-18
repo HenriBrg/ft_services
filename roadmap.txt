@@ -1,4 +1,0 @@
-Done :
-
-	- FTP
-	- Nginx

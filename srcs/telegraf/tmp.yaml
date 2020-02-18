@@ -112,36 +112,22 @@ config:
   outputs:
     - health:
         service_address: "http://:8888"
-#        compares:
-#          field: buffer_size
-#          lt: 5000.0
-#        contains:
-#          field: buffer_size
+        compares:
+          field: buffer_size
+          lt: 5000.0
+        contains:
+          field: buffer_size
     - influxdb:
         urls:
-          - "http://influxdb.default:8086"
+          - "http://influxdb.monitoring.svc:8086"
         database: "telegraf"
   inputs:
-    - http_response:
-        urls:
-          - "http://192.168.99.103:5000"
-    - influxdb:
-       urls:
-         - "http://influxdb.default:8086/debug/vars"
-    - mysql:
-        servers:
-          - "root:root@tcp(mysql.default:3306)/?tls=false"
-        perf_events_statements_digest_text_limit : 120
-        perf_events_statements_limit: 250
-    - cpu:
-        percpu: true
-        totalcpu: true
-#    - statsd:
-#        service_address: ":8125"
-#        percentiles:
-#          - 50
-#          - 95
-#          - 99
-#        metric_separator: "_"
-#        allowed_pending_messages: 10000
-#        percentile_limit: 1000
+    - statsd:
+        service_address: ":8125"
+        percentiles:
+          - 50
+          - 95
+          - 99
+        metric_separator: "_"
+        allowed_pending_messages: 10000
+        percentile_limit: 1000
