@@ -64,14 +64,7 @@ InfluxDB
 
 InfluxDB est un système de gestion de base de données écrit en Go
 
---------------------------------------------------------------------------------
-
-Pods Kubernetes
-
-Les Pods sont les plus petites unités informatiques déployables qui peuvent
-être créées et gérées dans Kubernetes.
-https://kubernetes.io/fr/docs/concepts/workloads/pods/pod/
---------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 
 Les volumes
 
