@@ -19,3 +19,14 @@ https://download.pureftpd.org/pub/pure-ftpd/doc/README.TLS
 https://stackoverflow.com/questions/49981601/difference-between-targetport-and-port-in-kubernetes-service-definition
 
 https://github.com/helm/charts/tree/master/stable
+
+
+
+
+
+https://devopssec.fr/article/minikube-installation-manipulation-cluster-kubernetes
+https://github.com/kubernetes/ingress-nginx/blob/master/rootfs/etc/nginx/template/nginx.tmpl
+https://stackoverflow.com/questions/54309811/access-ftp-service-via-other-docker-container
+
+https://medium.com/@rajathithanrajasekar/kubernetes-monitoring-using-influxdb-grafana-in-google-cloud-platform-51da13f6f3e
+https://blog.kublr.com/how-to-utilize-the-heapster-influxdb-grafana-stack-in-kubernetes-for-monitoring-pods-4a553f4d36c9

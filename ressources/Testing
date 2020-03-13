@@ -1,0 +1,10 @@
+# Wordpress
+
+# Your WordPress installation is now operational. To access the admin interface, use
+# the public IP address obtained from the output of kubectl get services,
+# followed by /wp-admin in your web browser
+
+# echo "Services installed... Launching dashboard \n"
+# echo "Wordpress URL is : http://$MINIKUBE_IP:5050 \n"
+# echo "NGINX URL is : http://$MINIKUBE_IP \n"
+# echo "PHPMYADMIN URL is : http://$MINIKUBE_IP:5000 \n"
