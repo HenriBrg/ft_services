@@ -8,3 +8,9 @@
 # echo "Wordpress URL is : http://$MINIKUBE_IP:5050 \n"
 # echo "NGINX URL is : http://$MINIKUBE_IP \n"
 # echo "PHPMYADMIN URL is : http://$MINIKUBE_IP:5000 \n"
+
+
+TEST PERSISTENT MYSQL/INFLUXDB:
+	kubectl exec -it \$(kubectl get pods | grep mysql | cut -d\" \" -f1) -- /bin/sh -c \"kill 1\"
+	kubectl exec -it \$(kubectl get pods | grep influxdb | cut -d\" \" -f1) -- /bin/sh -c \"kill 1\"
+"

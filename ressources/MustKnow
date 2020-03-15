@@ -1,0 +1,6 @@
+Tags : VBox, Docker, Docker Machine
+- https://stackoverflow.com/a/38624540/10830328
+
+Tags : Persistant Volume and PV Claim (PVs) inside Kubernetes
+- https://stackoverflow.com/questions/48956049/what-is-the-difference-between-persistent-volume-pv-and-persistent-volume-clai
+- https://kubernetes.io/docs/tasks/configure-pod-container/configure-persistent-volume-storage/
