@@ -1,3 +1,0 @@
-HELM Issues n°4557 : https://github.com/rook/rook/issues/4557
-Solved with :
-	- $ helm repo add stable https://kubernetes-charts.storage.googleapis.com/

@@ -27,9 +27,14 @@ pvs=(wp mysql influxdb)
 
 # • Paths
 srcs=./srcs
-# Mac à 42 : rootPath = /goinfre/$USER
-# Mac Home : rootPath = /Users/$USER
-rootPath=/Users/$USER
+if [[ -d "/goinfre" ]] ; then
+	echo "Mac à 42 : rootPath = /goinfre/$USER"
+	rootPath=/goinfre/$USER
+	export MINIKUBE_HOME="/goinfre/$USER"
+else
+	echo "Mac Home : rootPath = /Users/$USER"
+	rootPath=/Users/$USER
+fi
 rootDocker=$rootPath/docker
 rootMinikube=$rootPath/minikube
 rootArchive=$rootPath/images-archives
@@ -58,13 +63,13 @@ then
 	mkdir -p $rootMinikube
 	ln   -sf $rootMinikube /Users/$USER/.minikube
 
-	# pkill Docker
-	# if [ ! -d $rootDocker ]; then
-	# 	rm -rf ~/Library/Containers/com.docker.docker ~/.docker
-	# 	mkdir -p $rootDocker/{com.docker.docker,.docker}
-	# 	ln -sf $rootDocker/com.docker.docker ~/Library/Containers/com.docker.docker
-	# 	ln -sf $rootDocker/.docker ~/.docker
-	# fi
+	pkill Docker
+	if [ ! -d $rootDocker ]; then
+		rm -rf ~/Library/Containers/com.docker.docker ~/.docker
+		mkdir -p $rootDocker/{com.docker.docker,.docker}
+		ln -sf $rootDocker/com.docker.docker ~/Library/Containers/com.docker.docker
+		ln -sf $rootDocker/.docker ~/.docker
+	fi
 
 	which virtualbox > /dev/null
 	if [[ $? != 0 ]] ; then
@@ -74,8 +79,7 @@ then
 
 	docker info > /dev/null 2>&1
 	if [[ $? != 0 ]] ; then
-		echo "Docker isn't running. Launch Docker to continue"
-		exit 1
+		open -g -a Docker > /dev/null
 	fi
 
 	which docker-machine > /dev/null
@@ -85,10 +89,10 @@ then
 	fi
 
 	echo "Cleaning old ft_services resources"
-	docker-machine stop > /dev/null
-	minikube delete
+	docker-machine stop > /dev/null 2>&1
+	minikube delete > /dev/null 2>&1
 	echo "Creating new Docker resources"
-	# Docker-Machine create une VM (ici via VBox) dans laquel il installe Docker et
+	# Docker-Machine créer une VM (ici via VBox) dans laquel il installe Docker et
 	# facilite la coordination entre l'OS et la VM
 	docker-machine create --driver virtualbox default > /dev/null
 	docker-machine start
@@ -146,7 +150,7 @@ eval $(minikube docker-env)
 # • Création des volumes
 for pv in "${pvs[@]}"
 do
-	# -f take in arguments : type of resource and name of file
+	# -f take in arguments the type of resource (pvc) and name of file ($pv-pv-claim)
 	# About pvc / pv : check MustKnow
 	kubectl delete -f pvc $pv-pv-claim > /dev/null 2>&1
 	kubectl delete -f pv $pv-pv-volume > /dev/null 2>&1
@@ -156,8 +160,56 @@ done
 
 # • Création des services
 
+mkdir -p $rootArchive
 
+for service in "${services[@]}"
+do
+	echo "Building $service"
+	docker build -t $service-image $srcs/$services > /dev/null
+	if [[ $service == "nginx" ]] ; then
+		echo "Recreate Nginx Ingress"
+		kubectl delete -f srcs/ingress-deployment.yaml > /dev/null 2>&1
+		kubectl apply -f  srcs/ingress-deployment.yaml > /dev/null
+	fi
+	kubectl delete -f srcs/$service-deployment.yaml > /dev/null 2>&1
+	kubectl apply -f srcs/$service-deployment.yaml  > /dev/null
+	while [[ $(kubectl get pods -l app=$service -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]];
+	do
+		sleep 1;
+	done
+	sed -i '' s/__$service-POD__/$(kubectl get pods | grep $service | cut -d" " -f1)/g $srcs/grafana/srcs/global.json
+	echo "Done for $service"
+done
 
+echo "WordPress DB"
+kubectl exec -i $(kubectl get pods | grep mysql | cut -d" " -f1) -- mysql -u root -e 'CREATE DATABASE wordpress;' > /dev/null
+kubectl exec -i $(kubectl get pods | grep mysql | cut -d" " -f1) -- mysql wordpress -u root < $srcs/wordpress/srcs/wordpress.sql
 
+echo "Grafana Configuration"
+kubectl exec -i $(kubectl get pods | grep grafana | cut -d" " -f1) -- /bin/sh -c "cat >> /usr/share/grafana/conf/provisioning/dashboards/global.json" < $srcs/grafana/srcs/global.json > /dev/null 2>&1
 
-# • Création de la DB SQL
+rm -f 	$srcs/telegraf.conf $srcs/nginx/srcs/telegraf.conf $srcs/ftps/telegraf.conf \
+		$srcs/mysql/srcs/telegraf.conf $srcs/wordpress/srcs/telegraf.conf $srcs/phpmyadmin/srcs/telegraf.conf \
+		$srcs/grafana/srcs/telegraf.conf $srcs/nginx/srcs/install.sh $srcs/ftps/srcs/install.sh \
+		$srcs/ftps/Dockerfile $srcs/wordpress/srcs/wp-config.php $srcs/mysql/srcs/start.sh \
+		$srcs/wordpress/srcs/wordpress.sql $srcs/grafana/srcs/global.json $srcs/nginx/srcs/index.html
+
+echo "
+
+URL :
+
+	nginx:			http://$MINIKUBE_IP
+	wordpress:		http://$MINIKUBE_IP:5050
+	phpmyadmin:		http://$MINIKUBE_IP:5000
+	grafana:		http://$MINIKUBE_IP:3000
+	nginx:			ssh admin@$MINIKUBE_IP -p 3022
+	ftps:			$MINIKUBE_IP:21
+
+CREDENTIALS :
+	SSH:			$SSH_USERNAME:$SSH_PASSWORD (3022)
+	FTPS:			$FTPS_USERNAME:$FTPS_PASSWORD (21)
+	DB SQL PHP:		$DB_USER:$DB_PASSWORD
+	Grafana:		admin:admin
+	Influxdb:		root:password (8086)
+	Wordpress:		admin:admin
+"

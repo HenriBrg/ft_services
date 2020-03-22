@@ -1,0 +1,28 @@
+FTPS
+
+With Pure-FTPd, it's possible to use virtual users instead of real system users.
+ENV commands are required or Docker will fetch unecessary files
+https://coagul.org/drupal/publication/installation-et-configuration-serveur-ftp-pure-ftpd-sous-debian
+https://github.com/gimoh/docker-pureftpd/blob/master/Dockerfile
+https://wiki.archlinux.org/index.php/Pure-FTPd
+
+--------------------------------------------------------------------------------
+
+ClusterIp vs NodePort vs LoadBalancer
+
+https://stackoverflow.com/questions/41509439/whats-the-difference-between-clusterip-nodeport-and-loadbalancer-service-types
+
+--------------------------------------------------------------------------------
+
+Ingress : rechercher "Ingress" dans ce livre, la réponse est claire
+
+--------------------------------------------------------------------------------
+
+https://books.google.fr/books?id=0JmZDwAAQBAJ&pg=PA181&lpg=PA181&dq=apiVersion+minikube&source=bl&ots=sxbf1Mdz_x&sig=ACfU3U1NgLe5N2yy-6O-vLz6dlA1Re3mDw&hl=fr&sa=X&ved=2ahUKEwjmgvmYvKvoAhVK3IUKHfFSCGQQ6AEwBHoECAkQAQ#v=onepage&q=apiVersion%20minikube&f=false
+
+Tags : VBox, Docker, Docker Machine
+- https://stackoverflow.com/a/38624540/10830328
+
+Tags : Persistant Volume and PV Claim (PVs) inside Kubernetes
+- https://stackoverflow.com/questions/48956049/what-is-the-difference-between-persistent-volume-pv-and-persistent-volume-clai
+- https://kubernetes.io/docs/tasks/configure-pod-container/configure-persistent-volume-storage/
