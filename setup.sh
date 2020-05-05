@@ -35,6 +35,9 @@ else
 	echo "Mac Home : rootPath = /Users/$USER"
 	rootPath=/Users/$USER
 fi
+
+# AJOUTER UBUNTU IF STATEMENT
+
 rootDocker=$rootPath/docker
 rootMinikube=$rootPath/minikube
 rootArchive=$rootPath/images-archives
