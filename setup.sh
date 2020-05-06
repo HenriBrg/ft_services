@@ -1,3 +1,5 @@
+# CHECK FTPS GRAF INFLUX DONE
+
 if [[ $1 == "clean" ]]
 then
 	if minikube status > /dev/null 2>&1
@@ -107,6 +109,9 @@ then
 	MINIKUBE_IP=$(minikube ip)
 fi
 
+export MINIKUBE_IP=$(minikube ip)
+echo "MINIKUBE IP = $MINIKUBE_IP"
+
 # • On duplique au préalable tous les fichiers sources de configuration
 
 cp $srcs/nginx/srcs/install_model.sh 			$srcs/nginx/srcs/install.sh
@@ -168,20 +173,29 @@ mkdir -p $rootArchive
 for service in "${services[@]}"
 do
 	echo "Building $service"
-	docker build -t $service-image $srcs/$services > /dev/null
+	docker build -t $service-image $srcs/$services # > /dev/null
 	if [[ $service == "nginx" ]] ; then
 		echo "Recreate Nginx Ingress"
-		kubectl delete -f srcs/ingress-deployment.yaml > /dev/null 2>&1
-		kubectl apply -f  srcs/ingress-deployment.yaml > /dev/null
+		kubectl delete -f srcs/ingress-deployment.yaml # > /dev/null 2>&1
+		kubectl apply -f  srcs/ingress-deployment.yaml # > /dev/null
 	fi
-	kubectl delete -f srcs/$service-deployment.yaml > /dev/null 2>&1
-	kubectl apply -f srcs/$service-deployment.yaml  > /dev/null
+	kubectl delete -f srcs/$service-deployment.yaml # > /dev/null 2>&1
+	kubectl apply -f srcs/$service-deployment.yaml  # > /dev/null
 	while [[ $(kubectl get pods -l app=$service -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]];
 	do
 		sleep 1;
 	done
-	sed -i '' s/__$service-POD__/$(kubectl get pods | grep $service | cut -d" " -f1)/g $srcs/grafana/srcs/global.json
+
+	# On a besoin du nom et de l'ID (par exemple : nginx-56db6998bd-x6p62)
+	# sed -i '' s/__$service-POD__/$(kubectl get pods | grep $service | cut -d" " -f1)/g $srcs/grafana/srcs/global.json
+
+	tmpvar="__$service-POD__"
+	tmp2var= kubectl get pods | grep $service | cut -d" " -f1
+	sed -i '' s/$tmpvar/$tmp2var\ /g ./srcs/grafana/srcs/global.json
+	echo "SED exit val = $?"
+
 	echo "Done for $service"
+
 done
 
 echo "WordPress DB"
@@ -198,7 +212,6 @@ rm -f 	$srcs/telegraf.conf $srcs/nginx/srcs/telegraf.conf $srcs/ftps/telegraf.co
 		$srcs/wordpress/srcs/wordpress.sql $srcs/grafana/srcs/global.json $srcs/nginx/srcs/index.html
 
 echo "
-
 URL :
 
 	nginx:			http://$MINIKUBE_IP

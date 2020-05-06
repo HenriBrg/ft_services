@@ -1,0 +1,6 @@
+kubectl get all
+minikube dashboard
+nmap IP
+
+http://IP:80
+http://IP:443
