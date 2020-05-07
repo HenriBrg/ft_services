@@ -29,18 +29,18 @@ spec:
         app: influxdb
     spec:
       containers:
-      - name: influxdb
-        image: influxdb-image
-        imagePullPolicy: Never
-        securityContext:
-          privileged: true
-        ports:
         - name: influxdb
-          containerPort: 8086
-        volumeMounts:
-        - name: influxdb-persistent-storage
-          mountPath: /var/lib/influxdb
+          image: influxdb-image
+          imagePullPolicy: Never
+          securityContext:
+            privileged: true
+          ports:
+            - name: influxdb
+              containerPort: 8086
+          volumeMounts:
+            - name: influxdb-persistent-storage
+              mountPath: /var/lib/influxdb
       volumes:
-      - name: influxdb-persistent-storage
-        persistentVolumeClaim:
-          claimName: influxdb-pv-claim
+        - name: influxdb-persistent-storage
+          persistentVolumeClaim:
+            claimName: influxdb-pv-claim

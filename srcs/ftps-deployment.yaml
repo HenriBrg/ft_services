@@ -37,5 +37,3 @@ spec:
           imagePullPolicy: Never
           securityContext:
             privileged: true
-# imagePullPolicy
-# https://kubernetes.io/docs/concepts/configuration/overview/

@@ -420,8 +420,8 @@ INSERT INTO `wp_usermeta` (`umeta_id`, `user_id`, `meta_key`, `meta_value`) VALU
 (17, 1, 'wp_dashboard_quick_press_last_post_id', '4'),
 (18, 1, 'community-events-location', 'a:1:{s:2:"ip";s:10:"172.17.0.0";}'),
 (19, 2, 'nickname', 'hberger'),
-(20, 2, 'first_name', 'Léo'),
-(21, 2, 'last_name', 'Martin'),
+(20, 2, 'first_name', 'Henri'),
+(21, 2, 'last_name', 'Berger'),
 (22, 2, 'description', ''),
 (23, 2, 'rich_editing', 'true'),
 (24, 2, 'syntax_highlighting', 'true'),
@@ -487,7 +487,7 @@ CREATE TABLE `wp_users` (
 
 INSERT INTO `wp_users` (`ID`, `user_login`, `user_pass`, `user_nicename`, `user_email`, `user_url`, `user_registered`, `user_activation_key`, `user_status`, `display_name`) VALUES
 (1, 'admin', '$P$BS0X6BY.HwX/kCrlJtCCFz03V7mxrW.', 'admin', 'admin@gmail.com', '', '2020-02-12 05:46:41', '', 0, 'admin'),
-(2, 'hberger', '$P$BwEndibZGj0vHQPPqjwgG5kxeeqaSh/', 'hberger', 'hberger@student.42.fr', 'https://profile.intra.42.fr/users/hberger', '2020-02-12 05:52:53', '', 0, 'Léo Martin'),
+(2, 'hberger', '$P$BwEndibZGj0vHQPPqjwgG5kxeeqaSh/', 'hberger', 'hberger@student.42.fr', 'https://profile.intra.42.fr/users/hberger', '2020-02-12 05:52:53', '', 0, 'Henri Berger'),
 (3, 'norminet', '$P$Bkcny2LqEbnf8P.uv0/8sjdJwWQT6d.', 'norminet', 'norminet@42.fr', 'https://profile.intra.42.fr/users/norminet', '2020-02-12 05:53:39', '', 0, 'norminet'),
 (4, 'visitor', '$P$BDh1ttRySqEN10L7KxoMy7.x4./Zue.', 'visitor', 'visitor@gmail.com', '', '2020-02-12 05:56:02', '', 0, 'visitor');
 

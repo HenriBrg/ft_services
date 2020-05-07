@@ -1,4 +1,15 @@
-# CHECK FTPS GRAF INFLUX DONE
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    setup.sh                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: lmartin <lmartin@student.42.fr>            +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2020/02/06 05:23:46 by lmartin           #+#    #+#              #
+#    Updated: 2020/05/07 23:42:39 by henri            ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+#!/bin/bash
 
 if [[ $1 == "clean" ]]
 then
@@ -15,7 +26,17 @@ then
 	fi
 fi
 
-# • Credentials
+
+# <><><><><><><><><><><><><><><><><> VARIABLES <><><><><><><><><><><><><><><><><
+
+# Directories
+srcs=./srcs
+dir_goinfre=/Users/$USER # /goinfre/$USER at 42 or /sgoinfre - /Users/$USER at home on Mac
+docker_destination=$dir_goinfre/docker
+dir_minikube=$dir_goinfre/minikube
+dir_archive=$dir_goinfre/images-archives
+volumes=$srcs/volumes
+
 SSH_USERNAME=admin
 SSH_PASSWORD=admin
 FTPS_USERNAME=admin
@@ -23,97 +44,85 @@ FTPS_PASSWORD=admin
 DB_USER=root
 DB_PASSWORD=password
 
-# • Variables
 services=(nginx ftps wordpress mysql phpmyadmin grafana influxdb)
 pvs=(wp mysql influxdb)
 
-# • Paths
-srcs=./srcs
-if [[ -d "/goinfre" ]] ; then
-	echo "Mac à 42 : rootPath = /goinfre/$USER"
-	rootPath=/goinfre/$USER
-	export MINIKUBE_HOME="/goinfre/$USER"
-else
-	echo "Mac Home : rootPath = /Users/$USER"
-	rootPath=/Users/$USER
-fi
-
-# AJOUTER UBUNTU IF STATEMENT
-
-rootDocker=$rootPath/docker
-rootMinikube=$rootPath/minikube
-rootArchive=$rootPath/images-archives
-volumes=$srcs/volumes
-
-if [[ $1 != "update" ]]
+if [[ $1 != "deployment" ]]
 then
-	which brew > /dev/null
-	if [[ $? != 0 ]] ; then
-		echo "We need brew to continue. Install it"
-		exit 1
-	fi
+		# which -s brew
+		# if [[ $? != 0 ]] ; then
+		# 	echo "Brew not installed, installling..."
+		# 	# Install brew
+		# 	rm -rf $HOME/.brew
+		# 	git clone --depth=1 https://github.com/Homebrew/brew $HOME/.brew
+		# 	echo 'export PATH=$HOME/.brew/bin:$PATH' >> $HOME/.zshrc
+		# 	source $HOME/.zshrc
+		# fi
+		# echo "Updating brew..."
+		# brew update > /dev/null
 
-	which kubectl > /dev/null
-	if [[ $? != 0 ]] ; then
-		echo "We need kubectl to continue. Install it"
-		exit 1
-	fi
+		# # KUBECTL
+		# which -s kubectl
+		# if [[ $? != 0 ]] ; then
+		# 	echo "Kubectl not installed, installing..."
+		# 	brew install kubectl
+		# fi
 
-	which minikube > /dev/null
-	if [[ $? != 0 ]] ; then
-		echo "We need minikube to continue. Install it"
-		exit 1
-	fi
+		# MINIKUBE
+		# which -s minikube
+		# if [[ $? != 0 ]] ; then
+		# 	echo "Minikube not installed, installing..."
+		# 	# Install minikube
+		# 	brew install minikube
+		# fi
+		mkdir -p $dir_minikube
+		ln -sf $dir_minikube /Users/$USER/.minikube
 
-	mkdir -p $rootMinikube
-	ln   -sf $rootMinikube /Users/$USER/.minikube
+		# pkill Docker
+		# if [ ! -d $docker_destination ]; then
+		# 	rm -rf ~/Library/Containers/com.docker.docker ~/.docker
+		# 	mkdir -p $docker_destination/{com.docker.docker,.docker}
+		# 	ln -sf $docker_destination/com.docker.docker ~/Library/Containers/com.docker.docker
+		# 	ln -sf $docker_destination/.docker ~/.docker
+		# fi
 
-	pkill Docker
-	if [ ! -d $rootDocker ]; then
-		rm -rf ~/Library/Containers/com.docker.docker ~/.docker
-		mkdir -p $rootDocker/{com.docker.docker,.docker}
-		ln -sf $rootDocker/com.docker.docker ~/Library/Containers/com.docker.docker
-		ln -sf $rootDocker/.docker ~/.docker
-	fi
+		docker_state=$(docker info >/dev/null 2>&1)
+		if [[ $? -ne 0 ]]; then
+			echo "Opening Docker..."
+			open -g -a Docker > /dev/null
+		fi
 
-	which virtualbox > /dev/null
-	if [[ $? != 0 ]] ; then
-		echo "We need VirtualBox to continue. Install it"
-		exit 1
-	fi
+		# DOCKER-MACHINE
+		# which -s docker-machine
+		# if [[ $? != 0 ]] ; then
+		# 	echo "docker-machine not installed, installing..."
+		# 	# Install docker-machine
+		# 	brew install docker-machine
+		# fi
 
-	docker info > /dev/null 2>&1
-	if [[ $? != 0 ]] ; then
-		open -g -a Docker > /dev/null
-	fi
+		docker-machine stop > /dev/null
+		minikube delete
 
-	which docker-machine > /dev/null
-	if [[ $? != 0 ]] ; then
-		echo "We need Docker-Machine to continue. Install it"
-		exit 1
-	fi
+		docker-machine create --driver virtualbox default > /dev/null
+		docker-machine start
 
-	echo "Cleaning old ft_services resources"
-	docker-machine stop > /dev/null 2>&1
-	minikube delete > /dev/null 2>&1
-	echo "Creating new Docker resources"
-	# Docker-Machine créer une VM (ici via VBox) dans laquel il installe Docker et
-	# facilite la coordination entre l'OS et la VM
-	docker-machine create --driver virtualbox default > /dev/null
-	docker-machine start
-	echo "Creating new Minikube resources"
-	minikube start --cpus=2 --disk-size 11000 --vm-driver virtualbox --extra-config=apiserver.service-node-port-range=1-35000
-	minikube addons enable dashboard
-	minikube addons enable ingress
-	minikube addons enable metrics-server
-	MINIKUBE_IP=$(minikube ip)
+		# Launch Minikube
+		minikube start --cpus=2 --disk-size 11000 --vm-driver virtualbox --extra-config=apiserver.service-node-port-range=1-35000
+		minikube addons enable dashboard
+		minikube addons enable ingress
+		minikube addons enable metrics-server
+
+		#If error
+		#VBoxManage hostonlyif remove vboxnet1
+
+		minikube ip > /tmp/.minikube.ip
 fi
 
-export MINIKUBE_IP=$(minikube ip)
-echo "MINIKUBE IP = $MINIKUBE_IP"
+# ============================== REPLACE MODELS ================================
 
-# • On duplique au préalable tous les fichiers sources de configuration
+MINIKUBE_IP=`cat /tmp/.minikube.ip`;
 
+# copy models files
 cp $srcs/nginx/srcs/install_model.sh 			$srcs/nginx/srcs/install.sh
 cp $srcs/ftps/srcs/install_model.sh 			$srcs/ftps/srcs/install.sh
 cp $srcs/ftps/Dockerfile_model					$srcs/ftps/Dockerfile
@@ -123,8 +132,6 @@ cp $srcs/wordpress/srcs/wordpress_model.sql		$srcs/wordpress/srcs/wordpress.sql
 cp $srcs/grafana/srcs/global_model.json			$srcs/grafana/srcs/global.json
 cp $srcs/nginx/srcs/index_model.html			$srcs/nginx/srcs/index.html
 
-# • On intègre la configuration Telegraf dans chaque container
-
 cp $srcs/telegraf_model.conf					$srcs/telegraf.conf
 cp $srcs/telegraf.conf							$srcs/nginx/srcs/telegraf.conf
 cp $srcs/telegraf.conf							$srcs/ftps/srcs/telegraf.conf
@@ -132,9 +139,6 @@ cp $srcs/telegraf.conf							$srcs/mysql/srcs/telegraf.conf
 cp $srcs/telegraf.conf							$srcs/wordpress/srcs/telegraf.conf
 cp $srcs/telegraf.conf							$srcs/phpmyadmin/srcs/telegraf.conf
 cp $srcs/telegraf.conf							$srcs/grafana/srcs/telegraf.conf
-
-# • Après avoir dupliqué, on remplace toutes les variables dans les fichiers de
-# 	configuration temporaire
 
 sed -i '' s/__SSH_USERNAME__/$SSH_USERNAME/g	$srcs/nginx/srcs/install.sh
 sed -i '' s/__SSH_PASSWORD__/$SSH_PASSWORD/g	$srcs/nginx/srcs/install.sh
@@ -152,80 +156,96 @@ sed -i '' s/__SSH_PASSWORD__/$SSH_PASSWORD/g	$srcs/nginx/srcs/index.html
 sed -i '' s/__FTPS_USERNAME__/$FTPS_USERNAME/g	$srcs/nginx/srcs/index.html
 sed -i '' s/__FTPS_PASSWORD__/$FTPS_PASSWORD/g	$srcs/nginx/srcs/index.html
 
-# • Export des variables docker/minikube
 eval $(minikube docker-env)
 
-# • Création des volumes
+echo "Creating Persistent Volumes..."
 for pv in "${pvs[@]}"
 do
-	# -f take in arguments the type of resource (pvc) and name of file ($pv-pv-claim)
-	# About pvc / pv : check MustKnow
-	kubectl delete -f pvc $pv-pv-claim > /dev/null 2>&1
-	kubectl delete -f pv $pv-pv-volume > /dev/null 2>&1
-	kubectl apply -f $volumes/$pv-pv-volume.yaml > /dev/null
+	kubectl delete -f pvc $pv-pv-claim >/dev/null 2>&1 # delete yaml
+	kubectl delete -f pv $pv-pv-volume >/dev/null 2>&1
+	kubectl apply -f $volumes/$pv-pv-volume.yaml > /dev/null # volume and volume claim
 	kubectl apply -f $volumes/$pv-pv-claim.yaml > /dev/null
 done
 
-# • Création des services
-
-mkdir -p $rootArchive
-
+# create path for archives if doesn't exist
+mkdir -p $dir_archive
+## Save and get all customized images in minikube
+echo "Building images:"
 for service in "${services[@]}"
 do
-	echo "Building $service"
-	docker build -t $service-image $srcs/$services # > /dev/null
-	if [[ $service == "nginx" ]] ; then
-		echo "Recreate Nginx Ingress"
-		kubectl delete -f srcs/ingress-deployment.yaml # > /dev/null 2>&1
-		kubectl apply -f  srcs/ingress-deployment.yaml # > /dev/null
+	echo "		Building new image..."
+	docker build -t $service-image $srcs/$service > /dev/null # build archive
+	if [[ $service == "nginx" ]]
+	then
+		kubectl delete -f srcs/ingress-deployment.yaml >/dev/null 2>&1
+		echo "		Creating ingress for nginx..."
+		kubectl apply -f srcs/ingress-deployment.yaml > /dev/null
 	fi
-	kubectl delete -f srcs/$service-deployment.yaml # > /dev/null 2>&1
-	kubectl apply -f srcs/$service-deployment.yaml  # > /dev/null
+	kubectl delete -f srcs/$service-deployment.yaml > /dev/null 2>&1
+	echo "		Creating container..."
+	kubectl apply -f srcs/$service-deployment.yaml > /dev/null
 	while [[ $(kubectl get pods -l app=$service -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]];
 	do
 		sleep 1;
 	done
-
-	# On a besoin du nom et de l'ID (par exemple : nginx-56db6998bd-x6p62)
-	# sed -i '' s/__$service-POD__/$(kubectl get pods | grep $service | cut -d" " -f1)/g $srcs/grafana/srcs/global.json
-
-	tmpvar="__$service-POD__"
-	tmp2var= kubectl get pods | grep $service | cut -d" " -f1
-	sed -i '' s/$tmpvar/$tmp2var\ /g ./srcs/grafana/srcs/global.json
-	echo "SED exit val = $?"
-
-	echo "Done for $service"
+	sed -i '' s/__$service-POD__/$(kubectl get pods | grep $service | cut -d" " -f1)/g $srcs/grafana/srcs/global.json
 
 done
 
-echo "WordPress DB"
+# sql
 kubectl exec -i $(kubectl get pods | grep mysql | cut -d" " -f1) -- mysql -u root -e 'CREATE DATABASE wordpress;' > /dev/null
 kubectl exec -i $(kubectl get pods | grep mysql | cut -d" " -f1) -- mysql wordpress -u root < $srcs/wordpress/srcs/wordpress.sql
+echo "Database wordpress created !"
 
-echo "Grafana Configuration"
+# grafana dashboard
 kubectl exec -i $(kubectl get pods | grep grafana | cut -d" " -f1) -- /bin/sh -c "cat >> /usr/share/grafana/conf/provisioning/dashboards/global.json" < $srcs/grafana/srcs/global.json > /dev/null 2>&1
+echo "Dashboard ok !"
 
-rm -f 	$srcs/telegraf.conf $srcs/nginx/srcs/telegraf.conf $srcs/ftps/telegraf.conf \
-		$srcs/mysql/srcs/telegraf.conf $srcs/wordpress/srcs/telegraf.conf $srcs/phpmyadmin/srcs/telegraf.conf \
-		$srcs/grafana/srcs/telegraf.conf $srcs/nginx/srcs/install.sh $srcs/ftps/srcs/install.sh \
-		$srcs/ftps/Dockerfile $srcs/wordpress/srcs/wp-config.php $srcs/mysql/srcs/start.sh \
-		$srcs/wordpress/srcs/wordpress.sql $srcs/grafana/srcs/global.json $srcs/nginx/srcs/index.html
 
+echo "Deleting temporary files..."
+rm -f 	$srcs/telegraf.conf \
+		$srcs/nginx/srcs/telegraf.conf \
+		$srcs/ftps/telegraf.conf \
+		$srcs/mysql/srcs/telegraf.conf \
+		$srcs/wordpress/srcs/telegraf.conf \
+		$srcs/phpmyadmin/srcs/telegraf.conf \
+		$srcs/grafana/srcs/telegraf.conf \
+		$srcs/nginx/srcs/install.sh \
+		$srcs/ftps/srcs/install.sh \
+		$srcs/ftps/Dockerfile \
+		$srcs/wordpress/srcs/wp-config.php \
+		$srcs/mysql/srcs/start.sh \
+		$srcs/wordpress/srcs/wordpress.sql \
+		$srcs/grafana/srcs/global.json \
+		$srcs/nginx/srcs/index.html
+
+echo "✅		ft_services deployment done"
 echo "
-URL :
-
-	nginx:			http://$MINIKUBE_IP
+Minikube IP is : $MINIKUBE_IP - Type 'minikube dashboard' for dashboard
+================================================================================
+LINKS:
+	nginx:			https://$MINIKUBE_IP/ (or http)
 	wordpress:		http://$MINIKUBE_IP:5050
 	phpmyadmin:		http://$MINIKUBE_IP:5000
 	grafana:		http://$MINIKUBE_IP:3000
+
+OTHERS:
 	nginx:			ssh admin@$MINIKUBE_IP -p 3022
 	ftps:			$MINIKUBE_IP:21
 
-CREDENTIALS :
-	SSH:			$SSH_USERNAME:$SSH_PASSWORD (3022)
-	FTPS:			$FTPS_USERNAME:$FTPS_PASSWORD (21)
-	DB SQL PHP:		$DB_USER:$DB_PASSWORD
-	Grafana:		admin:admin
-	Influxdb:		root:password (8086)
-	Wordpress:		admin:admin
+ACCOUNTS:			(username:password)
+	ssh:			$SSH_USERNAME:$SSH_PASSWORD (port 3022)
+	ftps:			$FTPS_USERNAME:$FTPS_PASSWORD (port 21)
+	database:		$DB_USER:$DB_PASSWORD (sql / phpmyadmin)
+	grafana:		admin:admin
+	influxdb:		root:password (port 8086)
+	wordpress:
+				admin:admin (Admin)
+				lmartin:lmartin (Author)
+				norminet:norminet (Subscriber)
+				visitor:visitor (Subscriber)
+
+TEST PERSISTENT MYSQL/INFLUXDB:
+	kubectl exec -it \$(kubectl get pods | grep mysql | cut -d\" \" -f1) -- /bin/sh -c \"kill 1\"
+	kubectl exec -it \$(kubectl get pods | grep influxdb | cut -d\" \" -f1) -- /bin/sh -c \"kill 1\"
 "
