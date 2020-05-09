@@ -1,5 +1,3 @@
-# RUN THIS COMMAND BEFORE LAUCHING SCRIPT : sudo usermod -aG docker $(whoami);
-
 # <><><><><><><><><><><><><><><><><> CLEANER <><><><><><><><><><><><><><><><><><
 
 if [[ $1 == "clean" ]]
@@ -23,7 +21,6 @@ fi
 
 srcs=./srcs
 rootPath=/Users/$USER
-rootMinikube=$rootPath/minikube
 volumes=$srcs/volumes
 
 SSH_USERNAME=admin
@@ -41,19 +38,12 @@ pvs=(wp mysql influxdb)
 if [[ $1 != "update" ]]
 then
 
-		# IF UBUNTU
-		# base=https://github.com/docker/machine/releases/download/v0.16.0 &&
-		# curl -L $base/docker-machine-$(uname -s)-$(uname -m) >/tmp/docker-machine &&
-		# sudo mv /tmp/docker-machine /usr/local/bin/docker-machine &&
-		# chmod +x /usr/local/bin/docker-machine
-		# docker-machine create --driver docker default > /dev/null
-
 		# Download FileZilla on Ubuntu
 		# sudo apt-get update
 		# sudo apt-get install filezilla
 
-		mkdir -p $rootMinikube
-		ln -sf $rootMinikube /Users/$USER/.minikube
+		# sudo usermod -aG docker $(whoami);
+
 		minikube delete
 		minikube start --cpus=2 --disk-size 11000 --vm-driver virtualbox --extra-config=apiserver.service-node-port-range=1-35000
 		# minikube start --cpus=2 --disk-size 11000 --vm-driver docker --extra-config=apiserver.service-node-port-range=1-35000
@@ -74,8 +64,15 @@ cp $srcs/ftps/Dockerfile_model					$srcs/ftps/Dockerfile
 cp $srcs/wordpress/srcs/wp-config_model.php		$srcs/wordpress/srcs/wp-config.php
 cp $srcs/mysql/srcs/start_model.sh				$srcs/mysql/srcs/start.sh
 cp $srcs/wordpress/srcs/wordpress_model.sql		$srcs/wordpress/srcs/wordpress.sql
-cp $srcs/grafana/srcs/global_model.json			$srcs/grafana/srcs/global.json
 cp $srcs/nginx/srcs/index_model.html			$srcs/nginx/srcs/index.html
+
+cp $srcs/grafana/srcs/ftpsModel.json			$srcs/grafana/srcs/ftps.json
+cp $srcs/grafana/srcs/nginxModel.json			$srcs/grafana/srcs/nginx.json
+cp $srcs/grafana/srcs/mysqlModel.json			$srcs/grafana/srcs/mysql.json
+cp $srcs/grafana/srcs/phpmyadminModel.json		$srcs/grafana/srcs/phpmyadmin.json
+cp $srcs/grafana/srcs/grafanaModel.json			$srcs/grafana/srcs/grafana.json
+cp $srcs/grafana/srcs/wordpressModel.json		$srcs/grafana/srcs/wordpress.json
+cp $srcs/grafana/srcs/influxdbModel.json		$srcs/grafana/srcs/influxdb.json
 
 # ADAPT TELEGRAF
 
@@ -130,7 +127,7 @@ do
 	do
 		sleep 1;
 	done
-	sed -i ""  s/__$service-POD__/$(kubectl get pods | grep $service | cut -d" " -f1)/g $srcs/grafana/srcs/global.json
+	# sed -i "" s/__$service-POD__/$(kubectl get pods | grep $service | cut -d" " -f1)/g $srcs/grafana/srcs/global.json
 done
 
 echo "Ajout de la DB SQL connectée à Wordpress"
@@ -138,8 +135,14 @@ kubectl exec -i $(kubectl get pods | grep mysql | cut -d" " -f1) -- mysql -u roo
 echo "Création des tables SQL de Wordpress"
 kubectl exec -i $(kubectl get pods | grep mysql | cut -d" " -f1) -- mysql wordpress -u root < $srcs/wordpress/srcs/wordpress.sql
 
-echo "Création du dasboard Grafana"
-kubectl exec -i $(kubectl get pods | grep grafana | cut -d" " -f1) -- /bin/sh -c "cat >> /usr/share/grafana/conf/provisioning/dashboards/global.json" < $srcs/grafana/srcs/global.json > /dev/null 2>&1
+# echo "Création du dasboard Grafana"
+# kubectl exec -i $(kubectl get pods | grep grafana | cut -d" " -f1) -- /bin/sh -c "cat >> /usr/share/grafana/conf/provisioning/dashboards/global.json" < $srcs/grafana/srcs/global.json > /dev/null 2>&1
+
+for service in "${services[@]}"
+do
+	sed -i "" s/__$service-POD__/$(kubectl get pods | grep $service | cut -d" " -f1)/g $srcs/grafana/srcs/$service.json
+	kubectl exec -i $(kubectl get pods | grep grafana | cut -d" " -f1) -- /bin/sh -c "cat >> /usr/share/grafana/conf/provisioning/dashboards/$service.json" < $srcs/grafana/srcs/$service.json > /dev/null 2>&1
+done
 
 rm -f 	$srcs/telegraf.conf \
 		$srcs/nginx/srcs/telegraf.conf \
@@ -154,7 +157,13 @@ rm -f 	$srcs/telegraf.conf \
 		$srcs/wordpress/srcs/wp-config.php \
 		$srcs/mysql/srcs/start.sh \
 		$srcs/wordpress/srcs/wordpress.sql \
-		$srcs/grafana/srcs/global.json \
+		$srcs/grafana/srcs/ftps.json \
+		$srcs/grafana/srcs/nginx.json \
+		$srcs/grafana/srcs/mysql.json \
+		$srcs/grafana/srcs/phpmyadmin.json \
+		$srcs/grafana/srcs/grafana.json \
+		$srcs/grafana/srcs/wordpress.json \
+		$srcs/grafana/srcs/influxdb.json \
 		$srcs/nginx/srcs/index.html
 
 # <><><><><><><><><><><><><><><><><><> DONE ! <><><><><><><><><><><><><><><><><>

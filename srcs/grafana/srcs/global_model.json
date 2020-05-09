@@ -30,9 +30,7 @@
       "id": 2,
       "options": {
         "fieldOptions": {
-          "calcs": [
-            "mean"
-          ],
+          "calcs": ["mean"],
           "defaults": {
             "decimals": 1,
             "mappings": [],
@@ -70,15 +68,11 @@
         {
           "groupBy": [
             {
-              "params": [
-                "$__interval"
-              ],
+              "params": ["$__interval"],
               "type": "time"
             },
             {
-              "params": [
-                "null"
-              ],
+              "params": ["null"],
               "type": "fill"
             }
           ],
@@ -90,9 +84,7 @@
           "select": [
             [
               {
-                "params": [
-                  "usage_system"
-                ],
+                "params": ["usage_system"],
                 "type": "field"
               },
               {
@@ -127,9 +119,7 @@
       "id": 3,
       "options": {
         "fieldOptions": {
-          "calcs": [
-            "mean"
-          ],
+          "calcs": ["mean"],
           "defaults": {
             "decimals": 1,
             "mappings": [],
@@ -167,15 +157,11 @@
         {
           "groupBy": [
             {
-              "params": [
-                "$__interval"
-              ],
+              "params": ["$__interval"],
               "type": "time"
             },
             {
-              "params": [
-                "null"
-              ],
+              "params": ["null"],
               "type": "fill"
             }
           ],
@@ -187,9 +173,7 @@
           "select": [
             [
               {
-                "params": [
-                  "usage_system"
-                ],
+                "params": ["usage_system"],
                 "type": "field"
               },
               {
@@ -224,9 +208,7 @@
       "id": 6,
       "options": {
         "fieldOptions": {
-          "calcs": [
-            "mean"
-          ],
+          "calcs": ["mean"],
           "defaults": {
             "decimals": 1,
             "mappings": [],
@@ -264,15 +246,11 @@
         {
           "groupBy": [
             {
-              "params": [
-                "$__interval"
-              ],
+              "params": ["$__interval"],
               "type": "time"
             },
             {
-              "params": [
-                "null"
-              ],
+              "params": ["null"],
               "type": "fill"
             }
           ],
@@ -284,9 +262,7 @@
           "select": [
             [
               {
-                "params": [
-                  "usage_system"
-                ],
+                "params": ["usage_system"],
                 "type": "field"
               },
               {
@@ -325,15 +301,11 @@
         {
           "groupBy": [
             {
-              "params": [
-                "$__interval"
-              ],
+              "params": ["$__interval"],
               "type": "time"
             },
             {
-              "params": [
-                "null"
-              ],
+              "params": ["null"],
               "type": "fill"
             }
           ],
@@ -344,9 +316,7 @@
           "select": [
             [
               {
-                "params": [
-                  "value"
-                ],
+                "params": ["value"],
                 "type": "field"
               },
               {
@@ -367,11 +337,7 @@
       "cacheTimeout": null,
       "colorBackground": false,
       "colorValue": false,
-      "colors": [
-        "#299c46",
-        "rgba(237, 129, 40, 0.89)",
-        "#d44a3a"
-      ],
+      "colors": ["#299c46", "rgba(237, 129, 40, 0.89)", "#d44a3a"],
       "datasource": null,
       "format": "none",
       "gauge": {
@@ -431,15 +397,11 @@
           "alias": "",
           "groupBy": [
             {
-              "params": [
-                "$__interval"
-              ],
+              "params": ["$__interval"],
               "type": "time"
             },
             {
-              "params": [
-                "null"
-              ],
+              "params": ["null"],
               "type": "fill"
             }
           ],
@@ -451,9 +413,7 @@
           "select": [
             [
               {
-                "params": [
-                  "total"
-                ],
+                "params": ["total"],
                 "type": "field"
               },
               {
@@ -490,11 +450,7 @@
       "cacheTimeout": null,
       "colorBackground": false,
       "colorValue": false,
-      "colors": [
-        "#299c46",
-        "rgba(237, 129, 40, 0.89)",
-        "#d44a3a"
-      ],
+      "colors": ["#299c46", "rgba(237, 129, 40, 0.89)", "#d44a3a"],
       "datasource": null,
       "format": "none",
       "gauge": {
@@ -554,15 +510,11 @@
           "alias": "",
           "groupBy": [
             {
-              "params": [
-                "$__interval"
-              ],
+              "params": ["$__interval"],
               "type": "time"
             },
             {
-              "params": [
-                "null"
-              ],
+              "params": ["null"],
               "type": "fill"
             }
           ],
@@ -574,9 +526,7 @@
           "select": [
             [
               {
-                "params": [
-                  "total"
-                ],
+                "params": ["total"],
                 "type": "field"
               },
               {
@@ -613,11 +563,7 @@
       "cacheTimeout": null,
       "colorBackground": false,
       "colorValue": false,
-      "colors": [
-        "#299c46",
-        "rgba(237, 129, 40, 0.89)",
-        "#d44a3a"
-      ],
+      "colors": ["#299c46", "rgba(237, 129, 40, 0.89)", "#d44a3a"],
       "datasource": null,
       "format": "none",
       "gauge": {
@@ -677,15 +623,11 @@
           "alias": "",
           "groupBy": [
             {
-              "params": [
-                "$__interval"
-              ],
+              "params": ["$__interval"],
               "type": "time"
             },
             {
-              "params": [
-                "null"
-              ],
+              "params": ["null"],
               "type": "fill"
             }
           ],
@@ -697,9 +639,7 @@
           "select": [
             [
               {
-                "params": [
-                  "total"
-                ],
+                "params": ["total"],
                 "type": "field"
               },
               {
@@ -744,9 +684,7 @@
       "id": 5,
       "options": {
         "fieldOptions": {
-          "calcs": [
-            "mean"
-          ],
+          "calcs": ["mean"],
           "defaults": {
             "decimals": 1,
             "mappings": [],
@@ -784,15 +722,11 @@
         {
           "groupBy": [
             {
-              "params": [
-                "$__interval"
-              ],
+              "params": ["$__interval"],
               "type": "time"
             },
             {
-              "params": [
-                "null"
-              ],
+              "params": ["null"],
               "type": "fill"
             }
           ],
@@ -804,9 +738,7 @@
           "select": [
             [
               {
-                "params": [
-                  "usage_system"
-                ],
+                "params": ["usage_system"],
                 "type": "field"
               },
               {
@@ -841,9 +773,7 @@
       "id": 7,
       "options": {
         "fieldOptions": {
-          "calcs": [
-            "mean"
-          ],
+          "calcs": ["mean"],
           "defaults": {
             "decimals": 1,
             "mappings": [],
@@ -881,15 +811,11 @@
         {
           "groupBy": [
             {
-              "params": [
-                "$__interval"
-              ],
+              "params": ["$__interval"],
               "type": "time"
             },
             {
-              "params": [
-                "null"
-              ],
+              "params": ["null"],
               "type": "fill"
             }
           ],
@@ -901,9 +827,7 @@
           "select": [
             [
               {
-                "params": [
-                  "usage_system"
-                ],
+                "params": ["usage_system"],
                 "type": "field"
               },
               {
@@ -938,9 +862,7 @@
       "id": 8,
       "options": {
         "fieldOptions": {
-          "calcs": [
-            "mean"
-          ],
+          "calcs": ["mean"],
           "defaults": {
             "decimals": 1,
             "mappings": [],
@@ -978,15 +900,11 @@
         {
           "groupBy": [
             {
-              "params": [
-                "$__interval"
-              ],
+              "params": ["$__interval"],
               "type": "time"
             },
             {
-              "params": [
-                "null"
-              ],
+              "params": ["null"],
               "type": "fill"
             }
           ],
@@ -998,9 +916,7 @@
           "select": [
             [
               {
-                "params": [
-                  "usage_system"
-                ],
+                "params": ["usage_system"],
                 "type": "field"
               },
               {
@@ -1027,11 +943,7 @@
       "cacheTimeout": null,
       "colorBackground": false,
       "colorValue": false,
-      "colors": [
-        "#299c46",
-        "rgba(237, 129, 40, 0.89)",
-        "#d44a3a"
-      ],
+      "colors": ["#299c46", "rgba(237, 129, 40, 0.89)", "#d44a3a"],
       "datasource": null,
       "format": "none",
       "gauge": {
@@ -1091,15 +1003,11 @@
           "alias": "",
           "groupBy": [
             {
-              "params": [
-                "$__interval"
-              ],
+              "params": ["$__interval"],
               "type": "time"
             },
             {
-              "params": [
-                "null"
-              ],
+              "params": ["null"],
               "type": "fill"
             }
           ],
@@ -1111,9 +1019,7 @@
           "select": [
             [
               {
-                "params": [
-                  "total"
-                ],
+                "params": ["total"],
                 "type": "field"
               },
               {
@@ -1150,11 +1056,7 @@
       "cacheTimeout": null,
       "colorBackground": false,
       "colorValue": false,
-      "colors": [
-        "#299c46",
-        "rgba(237, 129, 40, 0.89)",
-        "#d44a3a"
-      ],
+      "colors": ["#299c46", "rgba(237, 129, 40, 0.89)", "#d44a3a"],
       "datasource": null,
       "format": "none",
       "gauge": {
@@ -1214,15 +1116,11 @@
           "alias": "",
           "groupBy": [
             {
-              "params": [
-                "$__interval"
-              ],
+              "params": ["$__interval"],
               "type": "time"
             },
             {
-              "params": [
-                "null"
-              ],
+              "params": ["null"],
               "type": "fill"
             }
           ],
@@ -1234,9 +1132,7 @@
           "select": [
             [
               {
-                "params": [
-                  "total"
-                ],
+                "params": ["total"],
                 "type": "field"
               },
               {
@@ -1273,11 +1169,7 @@
       "cacheTimeout": null,
       "colorBackground": false,
       "colorValue": false,
-      "colors": [
-        "#299c46",
-        "rgba(237, 129, 40, 0.89)",
-        "#d44a3a"
-      ],
+      "colors": ["#299c46", "rgba(237, 129, 40, 0.89)", "#d44a3a"],
       "datasource": null,
       "format": "none",
       "gauge": {
@@ -1337,15 +1229,11 @@
           "alias": "",
           "groupBy": [
             {
-              "params": [
-                "$__interval"
-              ],
+              "params": ["$__interval"],
               "type": "time"
             },
             {
-              "params": [
-                "null"
-              ],
+              "params": ["null"],
               "type": "fill"
             }
           ],
@@ -1357,9 +1245,7 @@
           "select": [
             [
               {
-                "params": [
-                  "total"
-                ],
+                "params": ["total"],
                 "type": "field"
               },
               {
@@ -1404,9 +1290,7 @@
       "id": 4,
       "options": {
         "fieldOptions": {
-          "calcs": [
-            "mean"
-          ],
+          "calcs": ["mean"],
           "defaults": {
             "decimals": 1,
             "mappings": [],
@@ -1444,15 +1328,11 @@
         {
           "groupBy": [
             {
-              "params": [
-                "$__interval"
-              ],
+              "params": ["$__interval"],
               "type": "time"
             },
             {
-              "params": [
-                "null"
-              ],
+              "params": ["null"],
               "type": "fill"
             }
           ],
@@ -1464,9 +1344,7 @@
           "select": [
             [
               {
-                "params": [
-                  "usage_system"
-                ],
+                "params": ["usage_system"],
                 "type": "field"
               },
               {
@@ -1493,11 +1371,7 @@
       "cacheTimeout": null,
       "colorBackground": false,
       "colorValue": false,
-      "colors": [
-        "#299c46",
-        "rgba(237, 129, 40, 0.89)",
-        "#d44a3a"
-      ],
+      "colors": ["#299c46", "rgba(237, 129, 40, 0.89)", "#d44a3a"],
       "datasource": null,
       "format": "none",
       "gauge": {
@@ -1557,15 +1431,11 @@
           "alias": "",
           "groupBy": [
             {
-              "params": [
-                "$__interval"
-              ],
+              "params": ["$__interval"],
               "type": "time"
             },
             {
-              "params": [
-                "null"
-              ],
+              "params": ["null"],
               "type": "fill"
             }
           ],
@@ -1577,9 +1447,7 @@
           "select": [
             [
               {
-                "params": [
-                  "total"
-                ],
+                "params": ["total"],
                 "type": "field"
               },
               {
@@ -1656,15 +1524,11 @@
           "alias": "memory (%)",
           "groupBy": [
             {
-              "params": [
-                "$__interval"
-              ],
+              "params": ["$__interval"],
               "type": "time"
             },
             {
-              "params": [
-                "null"
-              ],
+              "params": ["null"],
               "type": "fill"
             }
           ],
@@ -1676,9 +1540,7 @@
           "select": [
             [
               {
-                "params": [
-                  "used_percent"
-                ],
+                "params": ["used_percent"],
                 "type": "field"
               },
               {
@@ -1775,15 +1637,11 @@
           "alias": "cpu usage",
           "groupBy": [
             {
-              "params": [
-                "$__interval"
-              ],
+              "params": ["$__interval"],
               "type": "time"
             },
             {
-              "params": [
-                "null"
-              ],
+              "params": ["null"],
               "type": "fill"
             }
           ],
@@ -1795,9 +1653,7 @@
           "select": [
             [
               {
-                "params": [
-                  "usage_system"
-                ],
+                "params": ["usage_system"],
                 "type": "field"
               },
               {
