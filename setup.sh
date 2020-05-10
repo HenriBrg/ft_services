@@ -1,5 +1,3 @@
-#!/bin/sh
-
 # <><><><><><><><><><><><><><><><><> CLEANER <><><><><><><><><><><><><><><><><><
 
 if [[ $1 == "clean" ]]
@@ -37,6 +35,7 @@ pvs=(wp mysql influxdb)
 
 if [[ $1 != "update" ]]
 then
+		echo
 		echo "	NEW CONFIGURATION"
 		echo
 
@@ -49,6 +48,7 @@ then
 		echo
 		minikube delete
 		# minikube start --cpus=2 --disk-size 11000 --vm-driver virtualbox --extra-config=apiserver.service-node-port-range=1-35000
+		echo
 		echo "	START MINIKUBE"
 		echo
 		minikube start --vm-driver=docker --extra-config=apiserver.service-node-port-range=1-35000
