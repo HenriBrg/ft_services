@@ -1,3 +1,5 @@
+#!/bin/sh
+
 # <><><><><><><><><><><><><><><><><> CLEANER <><><><><><><><><><><><><><><><><><
 
 if [[ $1 == "clean" ]]
@@ -35,14 +37,21 @@ pvs=(wp mysql influxdb)
 
 if [[ $1 != "update" ]]
 then
+		echo "	NEW CONFIGURATION"
+		echo
+
 		# Download FileZilla on Ubuntu
 		# sudo apt-get update
 		# sudo apt-get install filezilla
 		# sudo usermod -aG docker $(whoami);
 
+		echo "	DELETE OLD MINIKUBE"
+		echo
 		minikube delete
 		# minikube start --cpus=2 --disk-size 11000 --vm-driver virtualbox --extra-config=apiserver.service-node-port-range=1-35000
-		minikube start --cpus=2 --disk-size 11000 --vm-driver docker --extra-config=apiserver.service-node-port-range=1-35000
+		echo "	START MINIKUBE"
+		echo
+		minikube start --vm-driver=docker --extra-config=apiserver.service-node-port-range=1-35000
 		minikube addons enable dashboard
 		minikube addons enable ingress
 		minikube addons enable metrics-server
@@ -97,6 +106,7 @@ sed -i '' s/__MINIKUBE_IP__/$MINIKUBE_IP/g		$srcs/nginx/srcs/index.html
 # <><><><><><><><><><><> BUILD CONTAINER & APPLY CONFIG <><><><><><><><><><><><>
 
 eval $(minikube docker-env)
+
 for pv in "${pvs[@]}"
 do
 	echo "Création du volume pour $pv"
