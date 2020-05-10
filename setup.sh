@@ -18,7 +18,6 @@ fi
 # <><><><><><><><><><><><><><><><><> ENV <><><><><><><><><><><><><><><><><><><><
 
 srcs=./srcs
-# rootPath=/usr/$USER # 42 : goinfre/ Mac : Users/ Ubuntu : usr/
 volumes=$srcs/volumes
 
 SSH_USERNAME=admin
@@ -50,8 +49,14 @@ then
 		echo
 		echo "	START MINIKUBE"
 		echo
-		minikube start --vm-driver=docker --extra-config=apiserver.service-node-port-range=1-35000
-		# minikube start --cpus=2 --disk-size 11000 --vm-driver=virtualbox --extra-config=apiserver.service-node-port-range=1-35000
+		if [ $OSTYPE == "linux-gnu" ]
+		then
+			# UBUNTU VM
+			minikube start --vm-driver=docker --extra-config=apiserver.service-node-port-range=1-35000
+		else
+			# MAC AT HOME
+			minikube start --cpus=2 --disk-size 11000 --vm-driver=virtualbox --extra-config=apiserver.service-node-port-range=1-35000
+		fi
 		minikube addons enable dashboard
 		minikube addons enable ingress
 		minikube addons enable metrics-server
@@ -92,17 +97,34 @@ cp $srcs/telegraf.conf							$srcs/grafana/srcs/telegraf.conf
 
 # ADD PASSWORD CONFIG
 
-sed -i  s/__SSH_USERNAME__/$SSH_USERNAME/g 	 	$srcs/nginx/srcs/install.sh
-sed -i  s/__SSH_PASSWORD__/$SSH_PASSWORD/g 	 	$srcs/nginx/srcs/install.sh
-sed -i  s/__FTPS_USERNAME__/$FTPS_USERNAME/g 	 	$srcs/ftps/srcs/install.sh
-sed -i  s/__FTPS_PASSWORD__/$FTPS_PASSWORD/g 	 	$srcs/ftps/srcs/install.sh
-sed -i  s/__MINIKUBE_IP__/$MINIKUBE_IP/g 	 		$srcs/ftps/Dockerfile
-sed -i  s/__DB_USER__/$DB_USER/g 	 				$srcs/wordpress/srcs/wp-config.php
-sed -i  s/__DB_PASSWORD__/$DB_PASSWORD/g 	 		$srcs/wordpress/srcs/wp-config.php
-sed -i  s/__DB_USER__/$DB_USER/g 	 				$srcs/mysql/srcs/start.sh
-sed -i  s/__DB_PASSWORD__/$DB_PASSWORD/g 	 		$srcs/mysql/srcs/start.sh
-sed -i  s/__MINIKUBE_IP__/$MINIKUBE_IP/g 	 		$srcs/wordpress/srcs/wordpress.sql
-sed -i  s/__MINIKUBE_IP__/$MINIKUBE_IP/g 	 		$srcs/nginx/srcs/index.html
+if [ $OSTYPE == "linux-gnu" ]
+then
+	# UBUNTU VM
+	sed -i s/__SSH_USERNAME__/$SSH_USERNAME/g 	 		$srcs/nginx/srcs/install.sh
+	sed -i s/__SSH_PASSWORD__/$SSH_PASSWORD/g 	 		$srcs/nginx/srcs/install.sh
+	sed -i s/__FTPS_USERNAME__/$FTPS_USERNAME/g 	 	$srcs/ftps/srcs/install.sh
+	sed -i s/__FTPS_PASSWORD__/$FTPS_PASSWORD/g 	 	$srcs/ftps/srcs/install.sh
+	sed -i s/__MINIKUBE_IP__/$MINIKUBE_IP/g 	 		$srcs/ftps/Dockerfile
+	sed -i s/__DB_USER__/$DB_USER/g 	 				$srcs/wordpress/srcs/wp-config.php
+	sed -i s/__DB_PASSWORD__/$DB_PASSWORD/g 	 		$srcs/wordpress/srcs/wp-config.php
+	sed -i s/__DB_USER__/$DB_USER/g 	 				$srcs/mysql/srcs/start.sh
+	sed -i s/__DB_PASSWORD__/$DB_PASSWORD/g 	 		$srcs/mysql/srcs/start.sh
+	sed -i s/__MINIKUBE_IP__/$MINIKUBE_IP/g 	 		$srcs/wordpress/srcs/wordpress.sql
+	sed -i s/__MINIKUBE_IP__/$MINIKUBE_IP/g 	 		$srcs/nginx/srcs/index.html
+else
+	# MAC AT HOME
+	sed -i "" s/__SSH_USERNAME__/$SSH_USERNAME/g 	 	$srcs/nginx/srcs/install.sh
+	sed -i "" s/__SSH_PASSWORD__/$SSH_PASSWORD/g 	 	$srcs/nginx/srcs/install.sh
+	sed -i "" s/__FTPS_USERNAME__/$FTPS_USERNAME/g 	 	$srcs/ftps/srcs/install.sh
+	sed -i "" s/__FTPS_PASSWORD__/$FTPS_PASSWORD/g 	 	$srcs/ftps/srcs/install.sh
+	sed -i "" s/__MINIKUBE_IP__/$MINIKUBE_IP/g 	 		$srcs/ftps/Dockerfile
+	sed -i "" s/__DB_USER__/$DB_USER/g 	 				$srcs/wordpress/srcs/wp-config.php
+	sed -i "" s/__DB_PASSWORD__/$DB_PASSWORD/g 	 		$srcs/wordpress/srcs/wp-config.php
+	sed -i "" s/__DB_USER__/$DB_USER/g 	 				$srcs/mysql/srcs/start.sh
+	sed -i "" s/__DB_PASSWORD__/$DB_PASSWORD/g 	 		$srcs/mysql/srcs/start.sh
+	sed -i "" s/__MINIKUBE_IP__/$MINIKUBE_IP/g 	 		$srcs/wordpress/srcs/wordpress.sql
+	sed -i "" s/__MINIKUBE_IP__/$MINIKUBE_IP/g 	 		$srcs/nginx/srcs/index.html
+fi
 
 # <><><><><><><><><><><> BUILD CONTAINER & APPLY CONFIG <><><><><><><><><><><><>
 
@@ -134,7 +156,6 @@ do
 	do
 		sleep 1;
 	done
-	# sed -i "" s/__$service-POD__/$(kubectl get pods | grep $service | cut -d" " -f1)/g $srcs/grafana/srcs/global.json
 done
 
 echo "Ajout de la DB SQL connectée à Wordpress"
@@ -142,14 +163,19 @@ kubectl exec -i $(kubectl get pods | grep mysql | cut -d" " -f1) -- mysql -u roo
 echo "Création des tables SQL de Wordpress"
 kubectl exec -i $(kubectl get pods | grep mysql | cut -d" " -f1) -- mysql wordpress -u root < $srcs/wordpress/srcs/wordpress.sql
 
-# echo "Création du dasboard Grafana"
-# kubectl exec -i $(kubectl get pods | grep grafana | cut -d" " -f1) -- /bin/sh -c "cat >> /usr/share/grafana/conf/provisioning/dashboards/global.json" < $srcs/grafana/srcs/global.json > /dev/null 2>&1
-
 for service in "${services[@]}"
 do
-	sed -i s/__$service-POD__/$(kubectl get pods | grep $service | cut -d" " -f1)/g $srcs/grafana/srcs/$service.json
+	if [ $OSTYPE == "linux-gnu" ]
+	then
+		# UBUNTU VM
+		sed -i s/__$service-POD__/$(kubectl get pods | grep $service | cut -d" " -f1)/g $srcs/grafana/srcs/$service.json
+	else
+		# MAC AT HOME
+		sed -i "" s/__$service-POD__/$(kubectl get pods | grep $service | cut -d" " -f1)/g $srcs/grafana/srcs/$service.json
+	fi
 	kubectl exec -i $(kubectl get pods | grep grafana | cut -d" " -f1) -- /bin/sh -c "cat >> /usr/share/grafana/conf/provisioning/dashboards/$service.json" < $srcs/grafana/srcs/$service.json > /dev/null 2>&1
 done
+
 
 rm -f 	$srcs/telegraf.conf \
 		$srcs/nginx/srcs/telegraf.conf \
