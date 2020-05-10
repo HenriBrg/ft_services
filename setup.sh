@@ -157,12 +157,13 @@ do
 		time=$(date +%s | bc)
 		chrono=$(($time % 10))
 		if [ $chrono == "0" ]; then
-			echo "Hello"
+			echo -n "."
 		fi
 		sleep 1
 	done
 done
 
+echo
 echo "Ajout de la DB SQL connectée à Wordpress"
 kubectl exec -i $(kubectl get pods | grep mysql | cut -d" " -f1) -- mysql -u root -e 'CREATE DATABASE wordpress;' > /dev/null
 echo "Création des tables SQL de Wordpress"
