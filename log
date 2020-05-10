@@ -1,0 +1,4 @@
+Création du container dédié à wordpress
+ADD failed: Get https://fr.wordpress.org/latest-fr_FR.tar.gz: read tcp 172.17.0.2:52686->198.143.164.252:443: read: connection reset by peer
+Application de la configuration YAML pour le service wordpress
+
