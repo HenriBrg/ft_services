@@ -47,11 +47,11 @@ then
 		echo "	DELETE OLD MINIKUBE"
 		echo
 		minikube delete
-		# minikube start --cpus=2 --disk-size 11000 --vm-driver virtualbox --extra-config=apiserver.service-node-port-range=1-35000
 		echo
 		echo "	START MINIKUBE"
 		echo
-		minikube start --vm-driver=docker --extra-config=apiserver.service-node-port-range=1-35000
+		# minikube start --vm-driver=docker --extra-config=apiserver.service-node-port-range=1-35000
+		minikube start --cpus=2 --disk-size 11000 --vm-driver=virtualbox --extra-config=apiserver.service-node-port-range=1-35000
 		minikube addons enable dashboard
 		minikube addons enable ingress
 		minikube addons enable metrics-server
@@ -92,17 +92,17 @@ cp $srcs/telegraf.conf							$srcs/grafana/srcs/telegraf.conf
 
 # ADD PASSWORD CONFIG
 
-sed "s/__SSH_USERNAME__/$SSH_USERNAME/g" $srcs/nginx/srcs/install.sh
-sed -i "" s/__SSH_PASSWORD__/$SSH_PASSWORD/g $srcs/nginx/srcs/install.sh
-sed -i "" s/__FTPS_USERNAME__/$FTPS_USERNAME/g $srcs/ftps/srcs/install.sh
-sed -i "" s/__FTPS_PASSWORD__/$FTPS_PASSWORD/g $srcs/ftps/srcs/install.sh
-sed -i "" s/__MINIKUBE_IP__/$MINIKUBE_IP/g $srcs/ftps/Dockerfile
-sed -i "" s/__DB_USER__/$DB_USER/g $srcs/wordpress/srcs/wp-config.php
-sed -i "" s/__DB_PASSWORD__/$DB_PASSWORD/g $srcs/wordpress/srcs/wp-config.php
-sed -i "" s/__DB_USER__/$DB_USER/g $srcs/mysql/srcs/start.sh
-sed -i "" s/__DB_PASSWORD__/$DB_PASSWORD/g $srcs/mysql/srcs/start.sh
-sed -i "" s/__MINIKUBE_IP__/$MINIKUBE_IP/g $srcs/wordpress/srcs/wordpress.sql
-sed -i "" s/__MINIKUBE_IP__/$MINIKUBE_IP/g $srcs/nginx/srcs/index.html
+sed -i "" s/__SSH_USERNAME__/$SSH_USERNAME/g 	 	$srcs/nginx/srcs/install.sh
+sed -i "" s/__SSH_PASSWORD__/$SSH_PASSWORD/g 	 	$srcs/nginx/srcs/install.sh
+sed -i "" s/__FTPS_USERNAME__/$FTPS_USERNAME/g 	 	$srcs/ftps/srcs/install.sh
+sed -i "" s/__FTPS_PASSWORD__/$FTPS_PASSWORD/g 	 	$srcs/ftps/srcs/install.sh
+sed -i "" s/__MINIKUBE_IP__/$MINIKUBE_IP/g 	 		$srcs/ftps/Dockerfile
+sed -i "" s/__DB_USER__/$DB_USER/g 	 				$srcs/wordpress/srcs/wp-config.php
+sed -i "" s/__DB_PASSWORD__/$DB_PASSWORD/g 	 		$srcs/wordpress/srcs/wp-config.php
+sed -i "" s/__DB_USER__/$DB_USER/g 	 				$srcs/mysql/srcs/start.sh
+sed -i "" s/__DB_PASSWORD__/$DB_PASSWORD/g 	 		$srcs/mysql/srcs/start.sh
+sed -i "" s/__MINIKUBE_IP__/$MINIKUBE_IP/g 	 		$srcs/wordpress/srcs/wordpress.sql
+sed -i "" s/__MINIKUBE_IP__/$MINIKUBE_IP/g 	 		$srcs/nginx/srcs/index.html
 
 # <><><><><><><><><><><> BUILD CONTAINER & APPLY CONFIG <><><><><><><><><><><><>
 
