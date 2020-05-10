@@ -154,7 +154,12 @@ do
 	kubectl apply -f srcs/$service-deployment.yaml > /dev/null
 	while [[ $(kubectl get pods -l app=$service -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]];
 	do
-		sleep 1;
+		time=$(date +%s | bc)
+		chrono=$(($time % 10))
+		if [ $chrono == "0" ]; then
+			echo "Hello"
+		fi
+		sleep 1
 	done
 done
 
