@@ -17,10 +17,8 @@ fi
 
 # <><><><><><><><><><><><><><><><><> ENV <><><><><><><><><><><><><><><><><><><><
 
-# 42 : goinfre/ Mac : Users/ Ubuntu : usr/
-
 srcs=./srcs
-rootPath=/Users/$USER
+# rootPath=/usr/$USER # 42 : goinfre/ Mac : Users/ Ubuntu : usr/
 volumes=$srcs/volumes
 
 SSH_USERNAME=admin
@@ -37,16 +35,14 @@ pvs=(wp mysql influxdb)
 
 if [[ $1 != "update" ]]
 then
-
 		# Download FileZilla on Ubuntu
 		# sudo apt-get update
 		# sudo apt-get install filezilla
-
 		# sudo usermod -aG docker $(whoami);
 
 		minikube delete
-		minikube start --cpus=2 --disk-size 11000 --vm-driver virtualbox --extra-config=apiserver.service-node-port-range=1-35000
-		# minikube start --cpus=2 --disk-size 11000 --vm-driver docker --extra-config=apiserver.service-node-port-range=1-35000
+		# minikube start --cpus=2 --disk-size 11000 --vm-driver virtualbox --extra-config=apiserver.service-node-port-range=1-35000
+		minikube start --cpus=2 --disk-size 11000 --vm-driver docker --extra-config=apiserver.service-node-port-range=1-35000
 		minikube addons enable dashboard
 		minikube addons enable ingress
 		minikube addons enable metrics-server
