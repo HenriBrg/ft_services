@@ -1,3 +1,7 @@
+
+# IF RUNNING WITH UBUNTU VM : Mettre le nombre de processeurs minimum à 2
+#							  dans le client Virtualbox avant de lancer la VM
+
 # <><><><><><><><><><><><><><><><><> CLEANER <><><><><><><><><><><><><><><><><><
 
 if [[ $1 == "clean" ]]
@@ -38,10 +42,9 @@ then
 		echo "	NEW CONFIGURATION"
 		echo
 
-		# Download FileZilla on Ubuntu
-		# sudo apt-get update
-		# sudo apt-get install filezilla
-		# sudo usermod -aG docker $(whoami);
+		# IF Docker refuse to run :
+		# 1) sudo usermod -aG docker $(whoami)
+		# 2) Clean all and restart the VM
 
 		echo "	DELETE OLD MINIKUBE"
 		echo
