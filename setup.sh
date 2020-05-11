@@ -157,7 +157,7 @@ do
 		time=$(date +%s | bc)
 		chrono=$(($time % 10))
 		if [ $chrono == "0" ]; then
-			echo -n "."
+			printf "."
 		fi
 		sleep 1
 	done
@@ -173,10 +173,8 @@ for service in "${services[@]}"
 do
 	if [ $OSTYPE == "linux-gnu" ]
 	then
-		# UBUNTU VM
 		sed -i s/__$service-POD__/$(kubectl get pods | grep $service | cut -d" " -f1)/g $srcs/grafana/srcs/$service.json
 	else
-		# MAC AT HOME
 		sed -i "" s/__$service-POD__/$(kubectl get pods | grep $service | cut -d" " -f1)/g $srcs/grafana/srcs/$service.json
 	fi
 	kubectl exec -i $(kubectl get pods | grep grafana | cut -d" " -f1) -- /bin/sh -c "cat >> /usr/share/grafana/conf/provisioning/dashboards/$service.json" < $srcs/grafana/srcs/$service.json > /dev/null 2>&1
