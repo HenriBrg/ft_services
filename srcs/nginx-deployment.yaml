@@ -15,7 +15,8 @@ spec:
       port: 443
     - name: ssh
       port: 22
-      nodePort: 3022
+      targetPort: 22
+      nodePort: 22
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -33,8 +34,8 @@ spec:
         app: nginx
     spec:
       containers:
-      - name: nginx
-        image: nginx-image
-        imagePullPolicy: Never
-        securityContext:
-          privileged: true
+        - name: nginx
+          image: nginx-image
+          imagePullPolicy: Never
+          securityContext:
+            privileged: true
