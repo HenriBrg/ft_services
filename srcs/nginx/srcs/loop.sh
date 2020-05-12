@@ -5,15 +5,14 @@ do
 	EXIT_CODE=$?
 	if [ $EXIT_CODE -eq 0 ]
 	then
-		echo "OK - Le serveur SSH tourne bien"
-		EXIT_CODE=0 # Par précaution
+		echo "SSH OK"
 	else
-		 echo "KO - Le serveur SSH ne tourne pas - On le relance"
-		EXIT_CODE=1 # Par précaution
+		echo "SSH KO"
+		/etc/init.d/sshd restart > /dev/null 2>&1
 	fi
-	sleep 10
+	sleep 5
+	EXIT_CODE=1 # Par précaution
 done
 
 # Avec le package openssh, le processus lancé s'appelle "sshd"
 # On recherche le processus sshd en excluant le processus grep de recherche lui même via -v
-# openrc; rc-update add sshd
