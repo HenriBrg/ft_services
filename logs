@@ -35,4 +35,15 @@
  1944  kubectl exec -it $(kubectl get pods | grep nginx | cut -d" " -f1) -- /bin/sh -c "cat var/www/localhost/htdocs/index.html"
  1945  kubectl exec -it $(kubectl get pods | grep nginx | cut -d" " -f1) -- /bin/sh -c "kill 1"
  1946  kubectl exec -it $(kubectl get pods | grep wordpress | cut -d" " -f1) -- /bin/sh -c "kill 1"
+kubectl exec -it nginx-56db6998bd-rnhrk /bin/sh
 
+get nginx container id
+1999  kubectl exec -it nginx-56db6998bd-rnhrk /bin/sh
+kill the port running sshd
+exit
+retry sshd, qui doit normalement fait
+retour container nginx
+run rc-update sshd (ou openrc avant)
+exit
+retry sshd qui doit fonctionner
+ 2000  ssh admin@172.17.0.2 -p 22
