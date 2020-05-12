@@ -4,12 +4,40 @@
 
 # <><><><><><><><><><><><><><><><><> CLEANER <><><><><><><><><><><><><><><><><><
 
+srcs=./srcs
+
+function deleteAllModelFiles {
+
+rm -f 	$srcs/telegraf.conf \
+		$srcs/nginx/srcs/telegraf.conf \
+		$srcs/ftps/telegraf.conf \
+		$srcs/mysql/srcs/telegraf.conf \
+		$srcs/wordpress/srcs/telegraf.conf \
+		$srcs/phpmyadmin/srcs/telegraf.conf \
+		$srcs/grafana/srcs/telegraf.conf \
+		$srcs/nginx/srcs/install.sh \
+		$srcs/ftps/srcs/install.sh \
+		$srcs/ftps/Dockerfile \
+		$srcs/wordpress/srcs/wp-config.php \
+		$srcs/mysql/srcs/start.sh \
+		$srcs/wordpress/srcs/wordpress.sql \
+		$srcs/grafana/srcs/ftps.json \
+		$srcs/grafana/srcs/nginx.json \
+		$srcs/grafana/srcs/mysql.json \
+		$srcs/grafana/srcs/phpmyadmin.json \
+		$srcs/grafana/srcs/grafana.json \
+		$srcs/grafana/srcs/wordpress.json \
+		$srcs/grafana/srcs/influxdb.json \
+		$srcs/nginx/srcs/index.html
+}
+
 if [[ $1 == "clean" ]]
 then
 	if minikube status > /dev/null 2>&1
 	then
 		echo "Cleaning all Kubectl ressources ..."
 		kubectl		delete all --all
+		deleteAllModelFiles
 		minikube	delete
 		echo "... Done"
 		exit
@@ -21,7 +49,6 @@ fi
 
 # <><><><><><><><><><><><><><><><><> ENV <><><><><><><><><><><><><><><><><><><><
 
-srcs=./srcs
 volumes=$srcs/volumes
 
 SSH_USERNAME=admin
@@ -183,28 +210,7 @@ do
 	kubectl exec -i $(kubectl get pods | grep grafana | cut -d" " -f1) -- /bin/sh -c "cat >> /usr/share/grafana/conf/provisioning/dashboards/$service.json" < $srcs/grafana/srcs/$service.json > /dev/null 2>&1
 done
 
-
-rm -f 	$srcs/telegraf.conf \
-		$srcs/nginx/srcs/telegraf.conf \
-		$srcs/ftps/telegraf.conf \
-		$srcs/mysql/srcs/telegraf.conf \
-		$srcs/wordpress/srcs/telegraf.conf \
-		$srcs/phpmyadmin/srcs/telegraf.conf \
-		$srcs/grafana/srcs/telegraf.conf \
-		$srcs/nginx/srcs/install.sh \
-		$srcs/ftps/srcs/install.sh \
-		$srcs/ftps/Dockerfile \
-		$srcs/wordpress/srcs/wp-config.php \
-		$srcs/mysql/srcs/start.sh \
-		$srcs/wordpress/srcs/wordpress.sql \
-		$srcs/grafana/srcs/ftps.json \
-		$srcs/grafana/srcs/nginx.json \
-		$srcs/grafana/srcs/mysql.json \
-		$srcs/grafana/srcs/phpmyadmin.json \
-		$srcs/grafana/srcs/grafana.json \
-		$srcs/grafana/srcs/wordpress.json \
-		$srcs/grafana/srcs/influxdb.json \
-		$srcs/nginx/srcs/index.html
+deleteAllModelFiles
 
 # <><><><><><><><><><><><><><><><><><> DONE ! <><><><><><><><><><><><><><><><><>
 
