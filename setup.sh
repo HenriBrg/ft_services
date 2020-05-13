@@ -218,14 +218,8 @@ deleteAllModelFiles
 echo "
 MINIKUBE IP		: $MINIKUBE_IP
 NGINX			: https://$MINIKUBE_IP
+NGINX SSL		: https://$MINIKUBE_IP:443
 WORDPRESS		: http://$MINIKUBE_IP:5050
-NGNINX SSH		: https://$MINIKUBE_IP:443
 PHPMYADMIN		: http://$MINIKUBE_IP:5000
 GRAFANA			: http://$MINIKUBE_IP:3000
-
-SSH				: admin admin
-FTPS			: admin admin
-SQL/PHPMYADMIN	: root  password
-INFLUXDB		: root  password
-WORDPRESS		: admin admin
 "
