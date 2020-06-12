@@ -1,4 +1,3 @@
-
 # IF RUNNING WITH UBUNTU VM : Mettre le nombre de processeurs minimum à 2
 #							  dans le client Virtualbox avant de lancer la VM
 
